@@ -5,7 +5,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://agrihub-backend.onrender.com/api/:splat"
+  to = "https://e-governace-agrihub.onrender.com/api/:splat"
   status = 200
 
 [[redirects]]
