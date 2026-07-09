@@ -5,6 +5,7 @@ import {
   getProduce,
   updateProduce,
   deleteProduce,
+  listMyProduce,
 } from '../controllers/produce.controller.js';
 import { createProduceRules } from '../validators/produce.validator.js';
 import { protect, authorize } from '../middleware/auth.js';
