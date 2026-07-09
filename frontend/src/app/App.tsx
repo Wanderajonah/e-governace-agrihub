@@ -181,7 +181,7 @@ function StatCard({
         <Icon size={22} style={{ color }} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
+        <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
           {label}
         </p>
         <p className="text-2xl font-bold text-gray-900 leading-none mb-1">
@@ -413,7 +413,7 @@ function Input({
   return (
     <div>
       {label && (
-        <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+        <label className="block text-sm font-semibold text-gray-600 mb-1">
           {label}
           {required && <span className="text-red-500 ml-0.5">*</span>}
         </label>
@@ -926,10 +926,10 @@ function LoginScreen({
                 <span className="flex h-2 w-2 rounded-full bg-[#0f6a34]" />
                 Uganda Market Governance Platform
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-black leading-[1.15] sm:leading-[1.05] tracking-tight text-[#121a12]">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-black leading-[1.15] sm:leading-[1.05] tracking-tight text-[#121a12]">
                 Real market data, for everyone who depends on it
               </h1>
-              <p className="mt-4 sm:mt-6 max-w-xl text-sm sm:text-base leading-6 sm:leading-7 text-[#64604d] lg:text-lg lg:leading-8">
+              <p className="mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-[#64604d] lg:text-xl lg:leading-9">
                 AgriHub digitises Uganda's agricultural markets — from produce
                 arrival to final sale — so farmers, traders, authorities, and
                 government can rely on real numbers, not guesswork.
@@ -989,7 +989,7 @@ function LoginScreen({
                 },
               ].map(({ label, value, suffix }) => (
                 <div key={label} className="text-center">
-                  <p className="text-lg sm:text-xl font-black text-white md:text-2xl">
+                  <p className="text-xl sm:text-2xl font-black text-white md:text-3xl">
                     {value}
                     <span className="text-emerald-300">{suffix}</span>
                   </p>
@@ -1058,7 +1058,7 @@ function LoginScreen({
                     <p className="mt-2 text-sm font-semibold text-[#121a12]">
                       {title}
                     </p>
-                    <p className="mt-1 text-xs leading-4 text-[#66614f]">
+                    <p className="mt-1 text-sm leading-5 text-[#66614f]">
                       {desc}
                     </p>
                   </div>
@@ -2057,10 +2057,10 @@ function DashboardScreen({ onNavigate }: { onNavigate?: (s: Screen) => void }) {
                   <p className="text-xs font-semibold text-gray-800 leading-tight">
                     {a.action}
                   </p>
-                  <p className="text-xs text-gray-500 leading-tight truncate">
+                  <p className="text-sm text-gray-500 leading-tight truncate">
                     {a.detail}
                   </p>
-                  <p className="text-xs text-gray-400 leading-tight">
+                  <p className="text-sm text-gray-400 leading-tight">
                     {a.time} · {a.user}
                   </p>
                 </div>
@@ -2549,7 +2549,7 @@ function FarmersScreen() {
               onChange={(v) => setForm((p) => ({ ...p, phone: v }))}
             />
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 District <span className="text-red-500">*</span>
               </label>
               <Select
@@ -2840,7 +2840,7 @@ function ProduceRegistrationScreen() {
           <Card title="Register New Produce">
             <div className="space-y-4">
               <div className="relative">
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Farmer <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -2886,7 +2886,7 @@ function ProduceRegistrationScreen() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Commodity <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -2916,7 +2916,7 @@ function ProduceRegistrationScreen() {
                   onChange={(v) => setForm((p) => ({ ...p, quantity: v }))}
                 />
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Unit <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -2935,7 +2935,7 @@ function ProduceRegistrationScreen() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Source District <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -2971,7 +2971,7 @@ function ProduceRegistrationScreen() {
                 onChange={(v) => setForm((p) => ({ ...p, vehiclePlate: v }))}
               />
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Additional Notes
                 </label>
                 <textarea
@@ -3150,7 +3150,7 @@ function ProduceRegistrationScreen() {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Commodity <span className="text-red-500">*</span>
               </label>
               <Select
@@ -3177,7 +3177,7 @@ function ProduceRegistrationScreen() {
                 onChange={(v) => setEditForm((p) => ({ ...p, quantity: v }))}
               />
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Unit
                 </label>
                 <Select
@@ -3189,7 +3189,7 @@ function ProduceRegistrationScreen() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Source District <span className="text-red-500">*</span>
               </label>
               <Select
@@ -3482,7 +3482,7 @@ function ProduceVerificationScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Quality Grade <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -3499,7 +3499,7 @@ function ProduceVerificationScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Quality Status <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -3517,7 +3517,7 @@ function ProduceVerificationScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Moisture Content (%)
                   </label>
                   <input
@@ -3530,7 +3530,7 @@ function ProduceVerificationScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Inspector Comments <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -3543,7 +3543,7 @@ function ProduceVerificationScreen() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Inspector Name
                   </label>
                   <input
@@ -4015,7 +4015,7 @@ function CommodityPricesScreen() {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Commodity <span className="text-red-500">*</span>
               </label>
               <select
@@ -4044,7 +4044,7 @@ function CommodityPricesScreen() {
               onChange={(v) => setForm((p) => ({ ...p, price: v }))}
             />
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Grade
               </label>
               <select
@@ -4431,7 +4431,7 @@ function TransactionsScreen() {
                 onChange={(v) => setForm((p) => ({ ...p, seller: v }))}
               />
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Commodity <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -4475,7 +4475,7 @@ function TransactionsScreen() {
                 </p>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Payment Method
                 </label>
                 <select
@@ -4524,7 +4524,7 @@ function TransactionsScreen() {
               onChange={(v) => setForm((p) => ({ ...p, seller: v }))}
             />
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Commodity <span className="text-red-500">*</span>
               </label>
               <select
@@ -4568,7 +4568,7 @@ function TransactionsScreen() {
               </p>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+              <label className="block text-sm font-semibold text-gray-600 mb-1">
                 Payment Method
               </label>
               <select
@@ -6001,7 +6001,7 @@ function UsersScreen() {
                 />
               )}
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Role <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -6017,7 +6017,7 @@ function UsersScreen() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Agency
                 </label>
                 <select
@@ -6215,7 +6215,7 @@ function NotificationsScreen() {
             <div className="space-y-3">
               <Input label="Title" placeholder="Announcement title" />
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Message
                 </label>
                 <textarea
@@ -6225,7 +6225,7 @@ function NotificationsScreen() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Recipients
                 </label>
                 <Select
@@ -6383,7 +6383,7 @@ function SettingsScreen() {
                   placeholder="+256 700 000 000"
                 />
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Agency
                   </label>
                   <Select
@@ -6392,7 +6392,7 @@ function SettingsScreen() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                  <label className="block text-sm font-semibold text-gray-600 mb-1">
                     Role
                   </label>
                   <Select options={["Administrator"]} className="w-full" />
@@ -6524,7 +6524,7 @@ function SettingsScreen() {
               <div className="space-y-5">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-600 mb-1">
                       Default Market
                     </label>
                     <Select
@@ -6537,7 +6537,7 @@ function SettingsScreen() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-600 mb-1">
                       Currency
                     </label>
                     <Select
@@ -6546,7 +6546,7 @@ function SettingsScreen() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-600 mb-1">
                       Date Format
                     </label>
                     <Select
@@ -6555,7 +6555,7 @@ function SettingsScreen() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-600 mb-1">
                       Language
                     </label>
                     <Select
