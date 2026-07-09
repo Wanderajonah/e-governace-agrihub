@@ -1014,30 +1014,35 @@ function LoginScreen({
           </div>
         </section>
 
-        <section id="how-it-works" className="border-t border-gray-200 bg-gray-50/50">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-            <div className="text-center">
+        <section id="how-it-works" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+          <div className="grid gap-12 items-start lg:grid-cols-2">
+            <div>
               <p className="text-sm font-medium uppercase tracking-wide text-[#0f6a34]">
-                How it works
+                What is AgriHub?
               </p>
               <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
-                From farm to analytics
+                A digital governance platform
               </h2>
-              <p className="mt-3 max-w-2xl mx-auto text-lg text-gray-600">
-                Every step of the agricultural market process, digitally tracked and verified.
+              <p className="mt-4 text-lg text-gray-600">
+                Used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
               </p>
             </div>
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-              {steps.map(({ icon: Icon, title, desc }, i) => (
-                <div
-                  key={title}
-                  className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-white p-4 text-center hover:shadow-sm transition-shadow"
-                >
-                  <Icon size={22} className="text-[#0f6a34]" />
-                  <p className="text-xs font-medium text-gray-700">{title}</p>
-                  <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
-                </div>
-              ))}
+            <div>
+              <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
+                How it works
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {steps.map(({ icon: Icon, title, desc }, i) => (
+                  <div
+                    key={title}
+                    className="flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-white p-4 text-center hover:shadow-sm transition-shadow"
+                  >
+                    <Icon size={22} className="text-[#0f6a34]" />
+                    <p className="text-xs font-medium text-gray-700">{title}</p>
+                    <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
