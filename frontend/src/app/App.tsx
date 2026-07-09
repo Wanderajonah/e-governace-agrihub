@@ -828,86 +828,106 @@ function LoginScreen({
   ];
 
   return (
-    <div className="min-h-screen bg-[#f7f4ee] text-[#132016]">
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-[rgba(247,244,238,0.92)] backdrop-blur-xl transition-shadow duration-300">
-        <div className="mx-auto flex max-w-[92vw] xl:max-w-[1800px] items-center justify-between px-5 py-4 md:px-8">
-          <a href="#top" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0f6a34] text-white shadow-sm">
-              <Leaf size={20} />
+    <div className="min-h-screen bg-[#fcfcf9] text-gray-900">
+      <header className="sticky top-0 z-40 border-b border-border/40 bg-background/95 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 h-16">
+          <a href="#top" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0f6a34] text-white">
+              <Leaf size={18} />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-[#0f6a34]">
+            <span className="text-xl font-bold tracking-tight text-[#0f6a34]">
               AgriHub
             </span>
           </a>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-1 md:flex">
             <a
               href="#features"
-              className="text-sm font-medium text-[#121a12] transition hover:text-[#0f6a34]"
+              className="px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
             >
               Features
             </a>
             <a
               href="#how-it-works"
-              className="text-sm font-medium text-[#121a12] transition hover:text-[#0f6a34]"
+              className="px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
             >
               How it works
             </a>
             <a
               href="#markets"
-              className="text-sm font-medium text-[#121a12] transition hover:text-[#0f6a34]"
+              className="px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
             >
               Markets
             </a>
-            <button
-              type="button"
-              onClick={openPortal}
-              className="rounded-full bg-[#0f6a34] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0c5b2d] hover:shadow-md"
-            >
-              Sign in
-            </button>
+            <div className="ml-2 pl-2 border-l border-gray-200 flex items-center gap-1">
+              <button
+                type="button"
+                onClick={openPortal}
+                className="px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                onClick={openPortal}
+                className="px-4 py-2 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] transition-colors shadow-sm"
+              >
+                Sign in
+              </button>
+            </div>
           </nav>
 
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex items-center justify-center rounded-lg p-2 md:hidden"
+            className="flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 md:hidden"
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {mobileOpen && (
-          <div className="border-t border-black/5 bg-[#f7f4ee] px-5 pb-6 pt-4 md:hidden">
-            <div className="flex flex-col gap-4">
+          <div className="border-t border-gray-200 bg-white px-4 pb-6 pt-4 md:hidden">
+            <div className="flex flex-col gap-1">
               <a
                 href="#features"
                 onClick={() => setMobileOpen(false)}
-                className="text-sm font-medium text-[#121a12]"
+                className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
               >
                 Features
               </a>
               <a
                 href="#how-it-works"
                 onClick={() => setMobileOpen(false)}
-                className="text-sm font-medium text-[#121a12]"
+                className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
               >
                 How it works
               </a>
               <a
                 href="#markets"
                 onClick={() => setMobileOpen(false)}
-                className="text-sm font-medium text-[#121a12]"
+                className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100"
               >
                 Markets
               </a>
+              <hr className="my-2 border-gray-100" />
               <button
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
                   openPortal();
                 }}
-                className="rounded-full bg-[#0f6a34] px-5 py-2.5 text-sm font-semibold text-white"
+                className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 text-left"
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  openPortal();
+                }}
+                className="px-4 py-2.5 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] text-left"
               >
                 Sign in
               </button>
@@ -917,55 +937,48 @@ function LoginScreen({
       </header>
 
       <main>
-        <section className="grid w-full min-h-[60vh] md:h-[80vh] items-stretch gap-0 md:grid-cols-[1.05fr_0.95fr]">
-          <div className="relative flex items-center overflow-hidden px-4 sm:px-6 md:px-12">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.95),rgba(247,244,238,0.82)_42%,rgba(247,244,238,0.2)_70%,transparent_100%)]" />
-            <div className="absolute -left-24 top-12 h-72 w-72 rounded-full bg-white/70 blur-3xl" />
-            <div className="relative">
-              <div className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-[#ddd5c4] bg-white/60 px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold text-[#6a6657] backdrop-blur-sm">
-                <span className="flex h-2 w-2 rounded-full bg-[#0f6a34]" />
-                Uganda Market Governance Platform
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-black leading-[1.15] sm:leading-[1.05] tracking-tight text-[#121a12]">
+        <section className="relative isolate overflow-hidden border-b border-gray-200">
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&h=900&fit=crop&auto=format"
+              alt=""
+              className="h-full w-full object-cover object-[68%_28%]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/60 to-black/70 lg:bg-white/0" />
+            <div className="absolute inset-0 hidden lg:block" style={{ background: 'linear-gradient(to right, #fcfcf9 0%, #fcfcf9 calc(50vw + 64px), transparent calc(50vw + 344px))' }} />
+          </div>
+          <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:py-40">
+            <div className="max-w-xl">
+              <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-gray-900">
                 Real market data, for everyone who depends on it
               </h1>
-              <p className="mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-7 sm:leading-8 text-[#64604d] lg:text-xl lg:leading-9">
+              <p className="mt-5 text-lg text-white/90 lg:text-gray-600">
                 AgriHub digitises Uganda's agricultural markets — from produce
                 arrival to final sale — so farmers, traders, authorities, and
                 government can rely on real numbers, not guesswork.
               </p>
-              <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={openPortal}
-                  className="rounded-xl bg-[#0f6a34] px-5 sm:px-7 py-3 sm:py-3.5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(15,106,52,0.18)] transition hover:bg-[#0c5b2d] hover:shadow-[0_18px_40px_rgba(15,106,52,0.28)]"
+                  className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] transition-colors shadow-sm"
                 >
                   Get started
                 </button>
                 <a
                   href="#markets"
-                  className="inline-flex items-center justify-center rounded-xl border border-[#ddd5c4] bg-white px-5 sm:px-7 py-3 sm:py-3.5 text-sm font-semibold text-[#121a12] transition hover:border-[#cfc6b3] hover:bg-[#fdfcf9]"
+                  className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
                 >
-                  View markets
+                  View today's prices
                 </a>
               </div>
             </div>
           </div>
-
-          <div className="relative h-full overflow-hidden">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(247,244,238,0.08)_0%,rgba(247,244,238,0.3)_25%,rgba(247,244,238,0.7)_50%,rgba(247,244,238,1)_100%)] md:bg-[linear-gradient(90deg,rgba(247,244,238,0.8)_0%,rgba(247,244,238,0.18)_24%,transparent_40%)] z-10" />
-            <img
-              src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&h=1600&fit=crop&auto=format"
-              alt="Woman at an agricultural market"
-              className="h-full w-full object-cover object-center"
-            />
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-[linear-gradient(90deg,rgba(247,244,238,0.98)_0%,rgba(247,244,238,0.8)_30%,transparent_60%)] z-20" />
-          </div>
         </section>
 
-        <section id="stats" className="border-y border-black/5 bg-[#0f6a34]">
-          <div className="mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-4 md:px-8 md:py-6">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <section id="stats" className="border-y border-gray-200 bg-[#0f6a34]">
+          <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
               {[
                 {
                   label: "Farmers Registered",
@@ -989,11 +1002,10 @@ function LoginScreen({
                 },
               ].map(({ label, value, suffix }) => (
                 <div key={label} className="text-center">
-                  <p className="text-xl sm:text-2xl font-black text-white md:text-3xl">
-                    {value}
-                    <span className="text-emerald-300">{suffix}</span>
+                  <p className="text-2xl sm:text-3xl font-bold text-white">
+                    {value}<span className="text-green-300">{suffix}</span>
                   </p>
-                  <p className="mt-0.5 text-xs font-medium text-emerald-100/80">
+                  <p className="mt-1 text-sm font-medium text-green-100/80">
                     {label}
                   </p>
                 </div>
@@ -1005,35 +1017,29 @@ function LoginScreen({
         <section
           id="features"
           data-observe
-          className="mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-20 md:px-8 md:py-28"
+          className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24"
         >
           <div
             className={`text-center transition-all duration-700 ${visible.has("features") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
           >
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#6a6657]">
-              Platform capabilities
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-[#121a12] sm:text-4xl">
-              Everything you need to govern agricultural markets
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
+              What is AgriHub?
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[#66614f]">
-              A complete digital toolkit for market authorities, inspectors, and
-              government officers.
+            <p className="mx-auto mt-3 max-w-2xl text-lg text-gray-600">
+              A digital governance platform used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
             </p>
           </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {features.map(({ icon: Icon, title, desc }, i) => (
               <div
                 key={title}
-                className={`group rounded-2xl border border-[#ded6c7] bg-white p-6 shadow-[0_1px_0_rgba(17,24,39,0.02)] transition-all duration-500 delay-[${i * 100}ms] hover:-translate-y-1 hover:border-[#0f6a34]/20 hover:shadow-[0_18px_40px_rgba(15,106,52,0.08)] ${visible.has("features") ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
+                className={`flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-white p-5 text-center transition-all duration-500 hover:shadow-sm ${visible.has("features") ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0f6a34]/10 text-[#0f6a34] transition group-hover:bg-[#0f6a34] group-hover:text-white">
-                  <Icon size={20} />
-                </div>
-                <h3 className="mt-4 text-base font-semibold text-[#121a12]">
+                <Icon size={24} className="text-[#0f6a34]" />
+                <h3 className="text-sm font-semibold text-gray-900">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-[#66614f]">{desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -1042,38 +1048,33 @@ function LoginScreen({
         <section
           id="how-it-works"
           data-observe
-          className="bg-[#f9f7f2] border-t border-black/5"
+          className="border-t border-gray-200 bg-gray-50/50"
         >
-          <div className="mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-12 md:px-8 md:py-16">
-            <div className={`grid gap-10 md:grid-cols-[1.3fr_1fr] items-center transition-all duration-700 ${visible.has("how-it-works") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {steps.map(({ icon: Icon, title, desc }, i) => (
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+            <div className={`grid gap-12 lg:grid-cols-2 items-center transition-all duration-700 ${visible.has("how-it-works") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}>
+              <div>
+                <p className="text-sm font-medium uppercase tracking-wide text-[#0f6a34]">
+                  How it works
+                </p>
+                <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
+                  What is AgriHub?
+                </h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  A digital governance platform used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {steps.map(({ icon: Icon, title }, i) => (
                   <div
                     key={title}
-                    className={`rounded-2xl border border-[#ded6c7] bg-white px-4 py-5 text-center shadow-[0_1px_0_rgba(17,24,39,0.02)] transition-all duration-500 delay-[${i * 100}ms] hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(15,106,52,0.08)] ${visible.has("how-it-works") ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
+                    className={`flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-white p-4 text-center transition-all duration-500 delay-[${i * 100}ms] hover:shadow-sm ${visible.has("how-it-works") ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
                   >
-                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#0f6a34]/10 text-[#0f6a34]">
-                      <Icon size={18} />
-                    </div>
-                    <p className="mt-2 text-sm font-semibold text-[#121a12]">
+                    <Icon size={22} className="text-[#0f6a34]" />
+                    <p className="text-xs font-medium text-gray-700">
                       {title}
-                    </p>
-                    <p className="mt-1 text-sm leading-5 text-[#66614f]">
-                      {desc}
                     </p>
                   </div>
                 ))}
-              </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6a6657]">
-                  How it works
-                </p>
-                <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#121a12] sm:text-3xl">
-                  What is AgriHub?
-                </h2>
-                <p className="mt-4 text-base leading-7 text-[#66614f]">
-                  A digital governance platform used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
-                </p>
               </div>
             </div>
           </div>
@@ -1125,48 +1126,46 @@ function LoginScreen({
         <section
           id="markets"
           data-observe
-          className="border-t border-black/5 bg-[#f9f7f2]"
+          className="border-t border-gray-200"
         >
-          <div className="mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-20 md:px-8 md:py-28">
+          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
             <div
               className={`transition-all duration-700 ${visible.has("markets") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6a6657]">
-                Markets
-              </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#121a12] sm:text-4xl">
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
                 Participating markets
               </h2>
-              <p className="mt-4 max-w-xl text-base leading-7 text-[#66614f]">
+              <p className="mt-2 text-gray-600">
                 Markets currently using AgriHub for digital governance and price
                 transparency.
               </p>
             </div>
             <div
-              className={`mt-10 grid gap-4 lg:grid-cols-3 transition-all duration-700 delay-200 ${visible.has("markets") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
+              className={`mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 transition-all duration-700 delay-200 ${visible.has("markets") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
             >
               {markets.map((market) => (
                 <article
                   key={market.name}
                   onClick={() => viewMarketPrices(market)}
-                  className="group rounded-2xl border border-[#ddd5c4] bg-white px-6 py-7 shadow-[0_1px_0_rgba(17,24,39,0.02)] transition hover:-translate-y-0.5 hover:shadow-md cursor-pointer"
+                  className="group/card flex flex-col rounded-xl bg-white py-4 text-sm ring-1 ring-gray-200 hover:shadow-sm transition-shadow cursor-pointer"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="px-4 flex items-center justify-between pt-2">
                     <div>
-                      <h3 className="text-base font-semibold text-[#121a12]">
+                      <h3 className="font-medium text-gray-900">
                         {market.name}
                       </h3>
-                      <div className="mt-1 flex items-center gap-1.5 text-xs text-[#6a6657]">
-                        <MapPin size={12} /> {market.location}
-                      </div>
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0f6a34]/10 text-[#0f6a34] transition group-hover:bg-[#0f6a34] group-hover:text-white">
-                      <Building2 size={18} />
+                      <p className="text-sm text-gray-500 mt-0.5">
+                        <MapPin size={12} className="inline mr-1" />
+                        {market.location}
+                      </p>
                     </div>
                   </div>
-                  <div className="mt-4 flex gap-4 border-t border-[#eeeae0] pt-4 text-xs text-[#66614f]">
-                    <span>{market.traders} traders</span>
-                    <span>{market.volume}</span>
+                  <div className="mt-3 px-4 flex items-center gap-4 pt-3 border-t border-gray-100">
+                    <span className="text-xs text-gray-500">{market.traders} traders</span>
+                    <span className="text-xs text-gray-500">{market.volume}</span>
+                    <span className="ml-auto text-xs font-medium text-[#0f6a34] hover:underline cursor-pointer">
+                      View today's prices &rarr;
+                    </span>
                   </div>
                 </article>
               ))}
@@ -1174,33 +1173,26 @@ function LoginScreen({
           </div>
         </section>
 
-        <section data-observe className="relative overflow-hidden bg-[#0f6a34]">
-          <div className="absolute inset-0 opacity-[0.04]">
-            <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full border-[20px] border-white" />
-            <div className="absolute -right-20 -bottom-20 h-80 w-80 rounded-full border-[20px] border-white" />
-          </div>
-          <div
-            className={`relative mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-20 text-center md:px-8 md:py-28 transition-all duration-700 ${visible.has("cta-section") ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}
-            id="cta-section"
-          >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        <section data-observe className="border-t border-gray-200 bg-[#0f6a34]">
+          <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
               Ready to transform your market?
             </h2>
-            <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-emerald-100">
+            <p className="mx-auto mt-3 max-w-lg text-lg text-green-100">
               Join the growing network of markets using digital governance for
               transparency and efficiency.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={openPortal}
-                className="rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-[#0f6a34] shadow-lg transition hover:bg-emerald-50"
+                className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-[#0f6a34] bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
               >
-                Access the platform
+                Get started
               </button>
               <a
                 href="#features"
-                className="rounded-xl border border-emerald-500/40 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-white rounded-lg border border-green-400/50 hover:bg-white/10 transition-colors"
               >
                 Learn more
               </a>
@@ -1209,187 +1201,56 @@ function LoginScreen({
         </section>
       </main>
 
-      <footer className="border-t border-black/5 bg-[#121a12]">
-        <div className="mx-auto max-w-[92vw] xl:max-w-[1800px] px-5 py-16 md:px-8">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0f6a34] text-white">
-                  <Leaf size={18} />
-                </div>
-                <span className="text-lg font-extrabold text-white">
-                  AgriHub
-                </span>
+      <footer className="border-t border-gray-200">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+          <div className="sm:flex sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0f6a34] text-white">
+                <Leaf size={14} />
               </div>
-              <p className="mt-4 text-sm leading-6 text-gray-400">
-                Digital agricultural market governance platform. Empowering
-                transparency from farm to analytics.
-              </p>
+              <span className="text-sm font-bold text-gray-900">
+                AgriHub
+              </span>
             </div>
-            <div>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Platform
-              </p>
-              <div className="flex flex-col gap-3">
-                <a
-                  href="#features"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Features
-                </a>
-                <a
-                  href="#how-it-works"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  How it works
-                </a>
-                <a
-                  href="#markets"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Markets
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Pricing
-                </a>
-              </div>
-            </div>
-            <div>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Resources
-              </p>
-              <div className="flex flex-col gap-3">
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Documentation
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  API Reference
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Support
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Contact
-                </a>
-              </div>
-            </div>
-            <div>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Government
-              </p>
-              <div className="flex flex-col gap-3">
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Ministry of Agriculture
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  UNBS Standards
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  KCCA
-                </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-400 transition hover:text-white"
-                >
-                  Privacy Policy
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} AgriHub — Uganda Agricultural
-            Market Governance Platform. All rights reserved.
+            <p className="mt-2 text-sm text-gray-500 sm:mt-0">
+              &copy; {new Date().getFullYear()} AgriHub — a digital agricultural market governance platform.
+            </p>
           </div>
         </div>
       </footer>
 
       {showPortal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-[0_32px_120px_rgba(0,0,0,0.24)] animate-in zoom-in-95 duration-300">
+          <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-xl">
             <button
               type="button"
               onClick={closePortal}
-              className="absolute right-4 top-4 z-10 rounded-full bg-white/90 p-2 text-[#121a12] shadow-sm transition hover:bg-white"
+              className="absolute right-3 top-3 z-10 rounded-lg bg-white/80 p-1.5 text-gray-500 hover:bg-white"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
             <div className="grid md:grid-cols-[0.95fr_1.05fr]">
-              <div className="relative hidden min-h-[640px] overflow-hidden bg-[#0f6a34] p-10 md:flex md:flex-col md:justify-between">
-                <div className="absolute inset-0 opacity-10">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="absolute rounded-full border border-white"
-                      style={{
-                        width: `${(i + 1) * 190}px`,
-                        height: `${(i + 1) * 190}px`,
-                        top: "-40px",
-                        left: "-40px",
-                        opacity: 0.28 - i * 0.04,
-                      }}
-                    />
-                  ))}
-                </div>
+              <div className="relative hidden min-h-[520px] bg-[#0f6a34] p-10 md:flex md:flex-col md:justify-between">
                 <div className="relative flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white">
-                    <Leaf size={22} className="text-[#0f6a34]" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20">
+                    <Leaf size={18} className="text-white" />
                   </div>
                   <div>
-                    <p className="text-xl font-bold text-white">AgriHub</p>
-                    <p className="text-sm text-emerald-100">
-                      Nakasero Market, Kampala
+                    <p className="text-lg font-bold text-white">AgriHub</p>
+                    <p className="text-sm text-green-100">
+                      Agricultural Market Platform
                     </p>
                   </div>
                 </div>
                 <div className="relative mx-auto max-w-sm text-center">
                   <img
                     src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=700&h=520&fit=crop&auto=format"
-                    alt="Agricultural market scene"
-                    className="h-56 w-full rounded-[1.5rem] object-cover shadow-2xl"
+                    alt=""
+                    className="h-52 w-full rounded-xl object-cover shadow-lg"
                   />
-                  <div className="absolute -bottom-4 -left-4 rounded-2xl bg-white px-4 py-3 shadow-xl">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle size={16} className="text-[#0f6a34]" />
-                      <span className="text-xs font-semibold text-[#121a12]">
-                        2,847 Farmers Registered
-                      </span>
-                    </div>
-                  </div>
-                  <div className="absolute -top-4 -right-4 rounded-2xl bg-white px-4 py-3 shadow-xl">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp size={16} className="text-[#0f6a34]" />
-                      <span className="text-xs font-semibold text-[#121a12]">
-                        UGX 2.4B Market Value
-                      </span>
-                    </div>
-                  </div>
                 </div>
                 <div className="relative">
-                  <p className="text-sm leading-7 text-emerald-100">
+                  <p className="text-sm leading-6 text-green-100">
                     Digital agricultural governance for market officers,
                     farmers, and government teams.
                   </p>
@@ -1398,66 +1259,66 @@ function LoginScreen({
 
               <div className="p-6 sm:p-8 md:p-10">
                 <div className="mb-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6a6657]">
-                    Secure government portal
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                    Sign in
                   </p>
-                  <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#121a12]">
-                    Sign in to AgriHub
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-900">
+                    Welcome to AgriHub
                   </h2>
-                  <p className="mt-2 text-sm text-[#66614f]">
+                  <p className="mt-1 text-sm text-gray-500">
                     Authorized access only for market administrators and
                     officers.
                   </p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-[#5e5949]">
-                      Email Address
+                    <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                      Email
                     </label>
                     <div className="relative">
                       <Mail
                         size={15}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9a937f]"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                       />
                       <input
                         type="email"
-                        placeholder="user@kcca.go.ug"
+                        placeholder="user@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full rounded-xl border border-[#ddd5c4] bg-[#fbfaf7] py-3 pl-9 pr-4 text-sm text-[#121a12] outline-none transition focus:border-[#0f6a34] focus:bg-white"
+                        className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-[#5e5949]">
+                    <label className="mb-1.5 block text-sm font-medium text-gray-700">
                       Password
                     </label>
                     <div className="relative">
                       <Lock
                         size={15}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9a937f]"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                       />
                       <input
                         type="password"
-                        placeholder="••••••••"
+                        placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full rounded-xl border border-[#ddd5c4] bg-[#fbfaf7] py-3 pl-9 pr-4 text-sm text-[#121a12] outline-none transition focus:border-[#0f6a34] focus:bg-white"
+                        className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
                       />
                     </div>
                   </div>
                   {loginError && (
-                    <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+                    <div className="rounded-lg border border-red-200 bg-red-50 p-3">
                       <p className="text-xs font-medium text-red-700">
                         {loginError}
                       </p>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-sm text-[#66614f]">
+                  <div className="flex items-center justify-between text-sm text-gray-500">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        className="rounded border-[#cfc6b3]"
+                        className="rounded border-gray-300"
                         defaultChecked
                       />{" "}
                       Remember me
@@ -1472,22 +1333,21 @@ function LoginScreen({
                   <button
                     type="submit"
                     disabled={loggingIn}
-                    className="w-full rounded-xl bg-[#0f6a34] py-3.5 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(15,106,52,0.2)] transition hover:bg-[#0c5b2d] disabled:opacity-50"
+                    className="w-full rounded-lg bg-[#0f6a34] py-2.5 text-sm font-medium text-white hover:bg-[#0c5b2d] transition-colors disabled:opacity-50"
                   >
-                    {loggingIn ? "Signing in..." : "Sign in to dashboard"}
+                    {loggingIn ? "Signing in..." : "Sign in"}
                   </button>
                 </form>
-                <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 p-3">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-emerald-900">
-                    <Shield size={12} /> Secure Government Portal — Authorized
-                    Access Only
+                <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                  <p className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
+                    <Shield size={12} /> Secure portal — authorized access only
                   </p>
                 </div>
-                <details className="group mt-4 rounded-xl border border-[#ddd5c4] bg-[#fbfaf7] p-4">
-                  <summary className="cursor-pointer select-none text-xs font-semibold text-[#66614f] transition hover:text-[#121a12]">
+                <details className="group mt-4 rounded-lg border border-gray-200 bg-white p-4">
+                  <summary className="cursor-pointer select-none text-xs font-medium text-gray-500 transition hover:text-gray-700">
                     Test Accounts
                   </summary>
-                  <div className="mt-3 space-y-2 text-xs text-[#66614f]">
+                  <div className="mt-3 space-y-2 text-xs text-gray-500">
                     <p className="flex justify-between gap-4">
                       <span>Administrator</span>
                       <span className="font-mono">
