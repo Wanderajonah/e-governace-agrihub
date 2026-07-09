@@ -52,10 +52,14 @@ export const deleteProduce = async (id) => {
 };
 
 export const listProduce = async (query) => {
-  const { page, limit, search, commodity, sourceDistrict, status, sort } = query;
+  const { page, limit, search, commodity, sourceDistrict, status, sort, farmerId } = query;
   const { skip, limit: pageLimit, page: currentPage } = calculatePagination(page, limit);
 
   const filter = {};
+
+  if (farmerId) {
+    filter.farmer = farmerId;
+  }
 
   if (search) {
     filter.$or = [

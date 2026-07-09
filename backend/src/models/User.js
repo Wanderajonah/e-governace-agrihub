@@ -23,13 +23,13 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['Administrator', 'Market Officer', 'Produce Inspector', 'Government Officer'],
+      enum: ['Administrator', 'Market Officer', 'Produce Inspector', 'Government Officer', 'Farmer'],
       required: [true, 'Role is required'],
     },
     agency: {
       type: String,
-      enum: ['KCCA', 'MAAIF', 'UBOS'],
-      required: [true, 'Agency is required'],
+      enum: ['KCCA', 'MAAIF', 'UBOS', 'Farmer'],
+      default: 'Farmer',
     },
     status: {
       type: String,

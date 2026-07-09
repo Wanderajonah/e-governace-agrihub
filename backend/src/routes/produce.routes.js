@@ -11,8 +11,9 @@ import { protect, authorize } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/', protect, authorize('Administrator', 'Market Officer'), createProduceRules, registerProduce);
+router.post('/', protect, authorize('Administrator', 'Market Officer', 'Farmer'), createProduceRules, registerProduce);
 router.get('/', protect, listProduce);
+router.get('/my', protect, authorize('Farmer'), listMyProduce);
 router.get('/:id', protect, getProduce);
 router.put('/:id', protect, authorize('Administrator', 'Market Officer'), updateProduce);
 router.delete('/:id', protect, authorize('Administrator'), deleteProduce);

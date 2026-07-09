@@ -22,6 +22,7 @@ const usersData = [
   { name: "David Okello", email: "gov@agrihub.com", role: "Government Officer", agency: "MAAIF", status: "Active", phone: "+256 700 000 003", password: "gov123" },
   { name: "Agnes Nalwoga", email: "a.nalwoga@ubos.go.ug", role: "Government Officer", agency: "UBOS", status: "Active", phone: "+256 700 000 004", password: "password123" },
   { name: "Robert Kiggundu", email: "r.kiggundu@kcca.go.ug", role: "Market Officer", agency: "KCCA", status: "Inactive", phone: "+256 700 000 005", password: "password123" },
+  { name: "John Ssekandi", email: "farmer@agrihub.com", role: "Farmer", agency: "Farmer", status: "Active", phone: "+256 700 000 006", password: "farmer123" },
 ];
 
 const farmersData = [

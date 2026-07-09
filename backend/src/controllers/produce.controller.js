@@ -3,8 +3,20 @@ import produceService from '../services/produce.service.js';
 
 export const registerProduce = async (req, res, next) => {
   try {
-    const produce = await produceService.registerProduce(req.body);
+    const data = req.user.role === 'Farmer'
+      ? { ...req.body, farmer: req.user._id, farmerName: req.user.name }
+      : req.body;
+    const produce = await produceService.registerProduce(data);
     return successResponse(res, produce, 'Produce registered successfully', 201);
+  } catch (err) {
+    return errorResponse(res, err.message, 500);
+  }
+};
+
+export const listMyProduce = async (req, res, next) => {
+  try {
+    const { data, total, page, limit } = await produceService.listProduce({ ...req.query, farmerId: req.user._id });
+    return paginatedResponse(res, data, total, page, limit);
   } catch (err) {
     return errorResponse(res, err.message, 500);
   }

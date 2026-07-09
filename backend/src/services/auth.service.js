@@ -8,6 +8,30 @@ const signToken = (id, role) => {
   });
 };
 
+export const register = async ({ name, email, password, phone }) => {
+  const existing = await User.findOne({ email });
+  if (existing) {
+    const error = new Error('Email already registered');
+    error.statusCode = 409;
+    throw error;
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    phone,
+    role: 'Farmer',
+    agency: 'Farmer',
+    status: 'Active',
+  });
+
+  const token = signToken(user._id, user.role);
+  user.password = undefined;
+
+  return { user, token };
+};
+
 export const login = async (email, password) => {
   const user = await User.findOne({ email }).select('+password +isActive');
 

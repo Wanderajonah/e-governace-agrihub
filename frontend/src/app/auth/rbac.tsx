@@ -1,8 +1,8 @@
 import React from "react";
 
-export type Role = "Administrator" | "Market Officer" | "Government Officer";
+export type Role = "Administrator" | "Market Officer" | "Government Officer" | "Farmer";
 
-export const ROLES: Role[] = ["Administrator", "Market Officer", "Government Officer"];
+export const ROLES: Role[] = ["Administrator", "Market Officer", "Government Officer", "Farmer"];
 
 export const ROLE_SCREENS: Record<Role, string[]> = {
   Administrator: [
@@ -17,6 +17,9 @@ export const ROLE_SCREENS: Record<Role, string[]> = {
   "Government Officer": [
     "dashboard", "market-analytics", "reports", "commodity-prices",
   ],
+  Farmer: [
+    "dashboard", "produce-registration", "commodity-prices",
+  ],
 };
 
 export const PERMISSIONS: Record<Role, {
@@ -28,6 +31,7 @@ export const PERMISSIONS: Record<Role, {
   Administrator: { canManageUsers: true, canManageSettings: true, canDelete: true, canWrite: true },
   "Market Officer": { canManageUsers: false, canManageSettings: false, canDelete: false, canWrite: true },
   "Government Officer": { canManageUsers: false, canManageSettings: false, canDelete: false, canWrite: false },
+  Farmer: { canManageUsers: false, canManageSettings: false, canDelete: false, canWrite: true },
 };
 
 export function canAccess(role: string | undefined, screen: string): boolean {

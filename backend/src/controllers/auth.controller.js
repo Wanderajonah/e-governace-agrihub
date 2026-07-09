@@ -1,6 +1,15 @@
 import { successResponse, errorResponse } from '../utils/apiResponse.js';
 import authService from '../services/auth.service.js';
 
+export const register = async (req, res, next) => {
+  try {
+    const { user, token } = await authService.register(req.body);
+    return successResponse(res, { user, token }, 'Registration successful', 201);
+  } catch (err) {
+    return errorResponse(res, err.message, err.statusCode || 500);
+  }
+};
+
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;

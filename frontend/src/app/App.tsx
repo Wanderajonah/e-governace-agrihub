@@ -632,11 +632,14 @@ function LoginScreen({
 }: {
   onLogin: (token: string, user: any) => void;
 }) {
-  const [email, setEmail] = useState("admin@agrihub.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [showPortal, setShowPortal] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [regName, setRegName] = useState("");
+  const [regPhone, setRegPhone] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [visible, setVisible] = useState<Set<string>>(new Set());
   const [counts, setCounts] = useState({
@@ -701,6 +704,23 @@ function LoginScreen({
 
   const openPortal = () => setShowPortal(true);
   const closePortal = () => setShowPortal(false);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoggingIn(true);
+    setLoginError("");
+    try {
+      const res = await api.register({ name: regName, email, password, phone: regPhone });
+      const { token, user } = res.data.data;
+      onLogin(token, user);
+    } catch (err: any) {
+      setLoginError(
+        err.response?.data?.message || "Registration failed.",
+      );
+    } finally {
+      setLoggingIn(false);
+    }
+  };
   const viewMarketPrices = async (market: any) => {
     setSelectedMarket(market);
     setLoadingPrices(true);
@@ -862,17 +882,17 @@ function LoginScreen({
             <div className="ml-2 pl-2 border-l border-gray-200 flex items-center gap-1">
               <button
                 type="button"
-                onClick={openPortal}
+                onClick={() => { setAuthMode("login"); openPortal(); }}
                 className="px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors"
               >
                 Log in
               </button>
               <button
                 type="button"
-                onClick={openPortal}
+                onClick={() => { setAuthMode("register"); openPortal(); }}
                 className="px-4 py-2 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] transition-colors shadow-sm"
               >
-                Sign in
+                Sign up
               </button>
             </div>
           </nav>
@@ -915,6 +935,7 @@ function LoginScreen({
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
+                  setAuthMode("login");
                   openPortal();
                 }}
                 className="px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 text-left"
@@ -925,11 +946,12 @@ function LoginScreen({
                 type="button"
                 onClick={() => {
                   setMobileOpen(false);
+                  setAuthMode("register");
                   openPortal();
                 }}
                 className="px-4 py-2.5 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] text-left"
               >
-                Sign in
+                Sign up
               </button>
             </div>
           </div>
@@ -960,7 +982,7 @@ function LoginScreen({
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={openPortal}
+                  onClick={() => { setAuthMode("register"); openPortal(); }}
                   className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-white bg-[#0f6a34] rounded-lg hover:bg-[#0c5b2d] transition-colors shadow-sm"
                 >
                   Get started
@@ -1152,7 +1174,7 @@ function LoginScreen({
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <button
                 type="button"
-                onClick={openPortal}
+                onClick={() => { setAuthMode("register"); openPortal(); }}
                 className="inline-flex items-center justify-center h-12 px-6 text-sm font-medium text-[#0f6a34] bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
               >
                 Get started
@@ -1225,19 +1247,47 @@ function LoginScreen({
               </div>
 
               <div className="p-6 sm:p-8 md:p-10">
-                <div className="mb-8">
-                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
-                    Sign in
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-900">
-                    Welcome to AgriHub
+                <div className="mb-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <button
+                      onClick={() => { setAuthMode("login"); setLoginError(""); }}
+                      className={`text-sm font-medium transition-colors ${authMode === "login" ? "text-[#0f6a34] border-b-2 border-[#0f6a34] pb-1" : "text-gray-400 pb-1"}`}
+                    >
+                      Sign in
+                    </button>
+                    <button
+                      onClick={() => { setAuthMode("register"); setLoginError(""); }}
+                      className={`text-sm font-medium transition-colors ${authMode === "register" ? "text-[#0f6a34] border-b-2 border-[#0f6a34] pb-1" : "text-gray-400 pb-1"}`}
+                    >
+                      Create account
+                    </button>
+                  </div>
+                  <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
+                    {authMode === "login" ? "Welcome back" : "Join AgriHub"}
                   </h2>
                   <p className="mt-1 text-sm text-gray-500">
-                    Authorized access only for market administrators and
-                    officers.
+                    {authMode === "login"
+                      ? "Authorized access only for market administrators and officers."
+                      : "Register as a farmer to track your produce and access market prices."}
                   </p>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-4">
+
+                <form onSubmit={authMode === "login" ? handleSubmit : handleRegister} className="space-y-4">
+                  {authMode === "register" && (
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Your full name"
+                        value={regName}
+                        onChange={(e) => setRegName(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-3.5 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
+                        required
+                      />
+                    </div>
+                  )}
                   <div>
                     <label className="mb-1.5 block text-sm font-medium text-gray-700">
                       Email
@@ -1253,6 +1303,7 @@ function LoginScreen({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
+                        required
                       />
                     </div>
                   </div>
@@ -1267,13 +1318,30 @@ function LoginScreen({
                       />
                       <input
                         type="password"
-                        placeholder="Enter your password"
+                        placeholder="At least 6 characters"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
+                        required
+                        minLength={6}
                       />
                     </div>
                   </div>
+                  {authMode === "register" && (
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="+256 700 000 000"
+                        value={regPhone}
+                        onChange={(e) => setRegPhone(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-3.5 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
+                        required
+                      />
+                    </div>
+                  )}
                   {loginError && (
                     <div className="rounded-lg border border-red-200 bg-red-50 p-3">
                       <p className="text-xs font-medium text-red-700">
@@ -1281,28 +1349,30 @@ function LoginScreen({
                       </p>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="rounded border-gray-300"
-                        defaultChecked
-                      />{" "}
-                      Remember me
-                    </label>
-                    <button
-                      type="button"
-                      className="font-medium text-[#0f6a34] transition hover:text-[#0c5b2d]"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
+                  {authMode === "login" && (
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300"
+                          defaultChecked
+                        />{" "}
+                        Remember me
+                      </label>
+                      <button
+                        type="button"
+                        className="font-medium text-[#0f6a34] transition hover:text-[#0c5b2d]"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
                   <button
                     type="submit"
                     disabled={loggingIn}
                     className="w-full rounded-lg bg-[#0f6a34] py-2.5 text-sm font-medium text-white hover:bg-[#0c5b2d] transition-colors disabled:opacity-50"
                   >
-                    {loggingIn ? "Signing in..." : "Sign in"}
+                    {loggingIn ? "Please wait..." : authMode === "login" ? "Sign in" : "Create account"}
                   </button>
                 </form>
                 <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
@@ -1317,21 +1387,19 @@ function LoginScreen({
                   <div className="mt-3 space-y-2 text-xs text-gray-500">
                     <p className="flex justify-between gap-4">
                       <span>Administrator</span>
-                      <span className="font-mono">
-                        admin@agrihub.com / admin123
-                      </span>
+                      <span className="font-mono">admin@agrihub.com / admin123</span>
                     </p>
                     <p className="flex justify-between gap-4">
                       <span>Market Officer</span>
-                      <span className="font-mono">
-                        officer@agrihub.com / officer123
-                      </span>
+                      <span className="font-mono">officer@agrihub.com / officer123</span>
                     </p>
                     <p className="flex justify-between gap-4">
                       <span>Government Officer</span>
-                      <span className="font-mono">
-                        gov@agrihub.com / gov123
-                      </span>
+                      <span className="font-mono">gov@agrihub.com / gov123</span>
+                    </p>
+                    <p className="flex justify-between gap-4">
+                      <span>Farmer</span>
+                      <span className="font-mono">farmer@agrihub.com / farmer123</span>
                     </p>
                   </div>
                 </details>
@@ -2448,14 +2516,16 @@ function FarmersScreen() {
 
 // PRODUCE REGISTRATION
 function ProduceRegistrationScreen() {
+  const currentUser = (() => { try { return JSON.parse(localStorage.getItem("agrihub_user") || "{}"); } catch { return {}; } })();
+  const isFarmer = currentUser.role === "Farmer";
   const [produceRecords, setProduceRecords] = useState<any[]>([]);
   const [farmers, setFarmers] = useState<any[]>([]);
   const [farmerSearch, setFarmerSearch] = useState("");
   const [showFarmerDropdown, setShowFarmerDropdown] = useState(false);
 
   const [form, setForm] = useState({
-    farmerId: "",
-    farmerName: "",
+    farmerId: isFarmer ? currentUser._id : "",
+    farmerName: isFarmer ? currentUser.name : "",
     commodity: "",
     quantity: "",
     unit: "kg",
@@ -2480,8 +2550,8 @@ function ProduceRegistrationScreen() {
   const [deletingProduce, setDeletingProduce] = useState<any | null>(null);
 
   const loadProduce = () => {
-    api
-      .listProduce({ limit: 20 })
+    const apiCall = isFarmer ? api.listProduce({ limit: 20, farmerId: currentUser._id }) : api.listProduce({ limit: 20 });
+    apiCall
       .then(({ data }) => {
         if (data.data) {
           const list = data.data.produce || data.data;
@@ -2666,6 +2736,7 @@ function ProduceRegistrationScreen() {
         <div className="lg:col-span-1">
           <Card title="Register New Produce">
             <div className="space-y-4">
+              {!isFarmer && (
               <div className="relative">
                 <label className="block text-sm font-semibold text-gray-600 mb-1">
                   Farmer <span className="text-red-500">*</span>
@@ -2711,6 +2782,12 @@ function ProduceRegistrationScreen() {
                   </div>
                 )}
               </div>
+              )}
+              {isFarmer && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800">
+                  Registering produce as <strong>{currentUser.name}</strong>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-semibold text-gray-600 mb-1">
