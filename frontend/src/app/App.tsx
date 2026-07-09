@@ -693,10 +693,9 @@ function LoginScreen({
       const { token, user } = res.data.data;
       onLogin(token, user);
     } catch (err: any) {
-      setLoginError(
-        err.response?.data?.message ||
-          "Login failed. Please check your credentials.",
-      );
+      const msg = err.response?.data?.message;
+      const detail = err.response?.data?.errors?.[0];
+      setLoginError(detail || msg || "Login failed. Please check your credentials.");
     } finally {
       setLoggingIn(false);
     }
@@ -714,9 +713,9 @@ function LoginScreen({
       const { token, user } = res.data.data;
       onLogin(token, user);
     } catch (err: any) {
-      setLoginError(
-        err.response?.data?.message || "Registration failed.",
-      );
+      const msg = err.response?.data?.message;
+      const detail = err.response?.data?.errors?.[0];
+      setLoginError(detail || msg || "Registration failed. Please try again.");
     } finally {
       setLoggingIn(false);
     }
