@@ -89,4 +89,4 @@ export const changePassword = async (userId, currentPassword, newPassword) => {
 
   return { message: 'Password changed successfully' };
 };
-export default { login, getCurrentUser, changePassword };
+export default { register, login, getCurrentUser, changePassword };
