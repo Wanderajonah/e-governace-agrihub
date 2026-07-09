@@ -25,6 +25,10 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'AgriHub API is running', docs: '/api-docs', health: '/api/health' });
+});
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 mountRoutes(app);
