@@ -456,6 +456,7 @@ function Sidebar({
   onCollapse,
   onLogout,
   role,
+  mobile,
 }: {
   active: Screen;
   onNav: (s: Screen) => void;
@@ -463,6 +464,7 @@ function Sidebar({
   onCollapse: () => void;
   onLogout?: () => void;
   role?: string;
+  mobile?: boolean;
 }) {
   const allowedScreens =
     ROLE_SCREENS[role as Role] || ROLE_SCREENS.Administrator;
@@ -471,7 +473,7 @@ function Sidebar({
   );
   return (
     <div
-      className={`hidden md:flex flex-col h-full transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`}
+      className={`${mobile ? "flex" : "hidden md:flex"} flex-col h-full transition-all duration-300 ${collapsed ? "w-16" : "w-64"}`}
       style={{ background: COLORS.dark, borderRight: `1px solid #374151` }}
     >
       {/* Logo */}
@@ -6793,6 +6795,7 @@ export default function App() {
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent side="left" className="p-0 w-64 bg-gray-900 border-r border-gray-700 [&_[data-slot=sheet-close]]:hidden">
           <Sidebar
+            mobile
             active={screen}
             onNav={(s) => { setScreen(s); setMobileMenuOpen(false); }}
             collapsed={false}
