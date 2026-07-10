@@ -115,9 +115,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
-    
     { href: "#markets", label: "Prices" },
-    { href: "#blog", label: "News" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -211,23 +209,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     },
   ];
 
-  const blogPosts = [
-    {
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=400&fit=crop&auto=format",
-      date: "23 May 2024", category: "Organic", title: "Why Agriculture & Eco is for the Environment",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacus odio, egestas vitae augue sed.",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop&auto=format",
-      date: "23 May 2024", category: "Farming", title: "Wheat Harvest Organic Gather nice Moment",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacus odio, egestas vitae augue sed.",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&h=400&fit=crop&auto=format",
-      date: "08 May 2024", category: "Livestock", title: "Agriculture Matters to the Future of World",
-      desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacus odio, egestas vitae augue sed.",
-    },
-  ];
 
   const faqs = [
     { q: "Who can use AgriHub?", a: "AgriHub is designed for market officers, farmers, traders, government officials, and agricultural analysts. Each role has specific permissions and dashboards tailored to their needs." },
@@ -617,35 +598,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ─── Blog ─── */}
-      <section id="blog" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <SubHeading>From the Blog Post</SubHeading>
-          <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Latest News & Articles</h2>
-          <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
-        </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {blogPosts.map((post, i) => (
-            <article key={i} className="group rounded-2xl overflow-hidden transition-all duration-300" style={{ background: A.card, border: `1px solid ${A.border}40` }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = `${A.border}40`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
-              <div className="relative h-48 overflow-hidden">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full text-white" style={{ background: A.greenDark }}>{post.category}</div>
-              </div>
-              <div className="p-5">
-                <p className="text-xs" style={{ color: A.muted }}>{post.date}</p>
-                <h3 style={{ color: A.greenDark }} className="text-base font-bold mt-1 mb-2">{post.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: A.muted }}>{post.desc}</p>
-                <a href="#" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold transition-all" style={{ color: A.greenDark }}>
-                  Continue Reading <ChevronRight size={12} />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
 
       {/* ─── Contact CTA ─── */}
       <section id="contact" className="py-16 sm:py-20" style={{ background: A.card, borderTop: `1px solid ${A.border}40` }}>
@@ -702,7 +655,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── Footer ─── */}
       <footer style={{ background: A.greenDark }}>
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: A.green }}>
@@ -740,24 +693,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               </ul>
             </div>
 
-            <div>
-              <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-sm font-bold text-white mb-4">News</h3>
-              <ul className="space-y-3">
-                {blogPosts.map((post, i) => (
-                  <li key={i} className="flex gap-3">
-                    <img src={post.image} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
-                    <div>
-                      <a href="#" className="text-sm font-medium text-white transition-colors leading-tight block"
-                        onMouseEnter={e => { e.currentTarget.style.color = A.green; }}
-                        onMouseLeave={e => { e.currentTarget.style.color = 'white'; }}>
-                        {post.title}
-                      </a>
-                      <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>{post.date}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+
 
             <div>
               <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-sm font-bold text-white mb-4">Contact</h3>
