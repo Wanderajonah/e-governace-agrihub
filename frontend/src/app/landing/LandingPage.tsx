@@ -183,10 +183,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   ];
 
   const markets = [
-    { name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk", image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&h=400&fit=crop&auto=format" },
-    { name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk", image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&auto=format" },
-    { name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk", image: "https://images.unsplash.com/photo-1498579687547-5b8da6e0f12b?w=600&h=400&fit=crop&auto=format" },
-    { name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk", image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop&auto=format" },
+    { name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk", image: "https://images.unsplash.com/photo-1605117882932-f9e32f03b11b?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk", image: "https://images.unsplash.com/photo-1580924559457-5e3f7a9d7a7b?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&h=400&fit=crop&auto=format" },
+    { name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk", image: "https://images.unsplash.com/photo-1527683611643-c5f4dbc7f63b?w=600&h=400&fit=crop&auto=format" },
   ];
 
   const faqs = [
@@ -624,9 +624,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <div className="relative h-44 overflow-hidden">
                 <img src={market.image} alt={market.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #FAF8EB, transparent)' }} />
-                <div className="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full text-white" style={{ background: A.greenDark }}>
-                  {["harvest", "farming", "organic", "solution"][i]}
-                </div>
               </div>
               <div className="p-4">
                 <h3 style={{ color: A.greenDark }} className="text-base font-bold">{market.name}</h3>
@@ -762,7 +759,11 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                   </div>
 
                   {/* Price list */}
-                  <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                  <div className="flex items-center justify-between px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wider" style={{ color: A.muted }}>
+                    <span>Commodity</span>
+                    <span>Price (UGX)</span>
+                  </div>
+                  <div className="space-y-1.5 max-h-36 overflow-y-auto">
                     {marketPrices.slice(0, 10).map((p: any, i: number) => (
                       <div key={i} className="flex items-center justify-between p-2.5 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
                         <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
