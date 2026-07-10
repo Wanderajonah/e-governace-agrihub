@@ -115,8 +115,8 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
-    { href: "#markets", label: "Markets" },
-    { href: "#projects", label: "Projects" },
+    
+    { href: "#markets", label: "Prices" },
     { href: "#blog", label: "News" },
     { href: "#contact", label: "Contact" },
   ];
@@ -250,10 +250,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         <div className="mx-auto max-w-6xl px-4 flex items-center justify-between h-10">
           <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>
             <span className="flex items-center gap-1.5">
-              <Mail size={12} style={{ color: A.green }} /> needhelp@company.com
+              <Mail size={12} style={{ color: A.green }} /> admin@agrihub.com
             </span>
             <span className="flex items-center gap-1.5">
-              <MapPin size={12} style={{ color: A.green }} /> 80 Broklyn Golden Street USA
+              <MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -339,9 +339,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${A.greenDark} 0%, ${A.greenDark}cc 40%, transparent 70%)` }} />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-6 backdrop-blur-sm" style={{ background: '#65CB3B20', border: `1px solid ${A.green}50`, color: A.green }}>
-              <Leaf size={14} /> We are Producing Natural Products
-            </div>
+
             <h1 style={{ ...headingFont, lineHeight: '1.05' }} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
               Smart Agriculture.
             </h1>
@@ -354,7 +352,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                 style={{ background: A.green }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#55b832'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = A.green; }}>
-                Discover More <ArrowRight size={16} className="ml-2" />
+                View Today's Prices <ArrowRight size={16} className="ml-2" />
               </button>
               <a href="#services"
                 className="inline-flex items-center justify-center h-13 px-8 text-sm font-medium rounded-xl transition-colors text-white"
@@ -558,8 +556,8 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── Markets / Projects ─── */}
       <section id="markets" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <SubHeading>Our Latest Projects</SubHeading>
-          <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Recently completed Projects</h2>
+          <SubHeading>Market Prices</SubHeading>
+          <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Today's Commodity Prices</h2>
           <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
         </div>
 
@@ -664,9 +662,9 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               </p>
               <div className="mt-8 space-y-4">
                 {[
-                  { icon: Phone, label: "Have Question?", value: "+92 (8800)-9850" },
-                  { icon: Mail, label: "Write Email", value: "needhelp@company.com" },
-                  { icon: MapPin, label: "Visit Now", value: "88 Broklyn Golden Street. USA" },
+                  { icon: Phone, label: "Have Question?", value: "+256 700 123 456" },
+                  { icon: Mail, label: "Write Email", value: "admin@agrihub.com" },
+                  { icon: MapPin, label: "Visit Now", value: "Kampala, Uganda" },
                 ].map(({ icon: Icon, label, value }) => (
                   <div key={label} className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: `${A.green}20` }}>
@@ -766,10 +764,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-sm font-bold text-white mb-4">Contact</h3>
               <ul className="space-y-3 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 <li className="flex items-center gap-2">
-                  <Phone size={12} style={{ color: A.green }} /> +92 (0088) 6823
+                  <Phone size={12} style={{ color: A.green }} /> +256 788 654 321
                 </li>
                 <li className="flex items-center gap-2">
-                  <Mail size={12} style={{ color: A.green }} /> needhelp@company.com
+                  <Mail size={12} style={{ color: A.green }} /> admin@agrihub.com
                 </li>
                 <li className="flex items-center gap-2">
                   <MapPin size={12} style={{ color: A.green }} /> 80 Broklyn Golden Street. USA
