@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createPortal } from "react";
 import { createPortal } from "react-dom";
 import * as api from "../../api";
 import gsap from "gsap";
@@ -6,9 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Leaf, Menu, X, Users, Package, ShieldCheck, TrendingUp,
   ArrowLeftRight, BarChart2, CheckSquare, Tag, ArrowRight,
-  MapPin, Mail, Phone, Clock, ChevronRight, Star, Quote,
+  MapPin, Mail, Phone, Clock, ChevronLeft, ChevronRight, Star, Quote,
   Facebook, Twitter, Linkedin, Instagram, Send, ChevronDown,
   ChevronUp, Lock, Flower2, Sprout, Sun, Snowflake,
+  ChevronLeft,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -48,10 +49,9 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [marketPrices, setMarketPrices] = useState<any[]>([]);
   const [loadingPrices, setLoadingPrices] = useState(false);
   const [season, setSeason] = useState(50);
+  const [journeyStep, setJourneyStep] = useState(0);
 
   const seedlingRef = useRef<SVGSVGElement>(null);
-  const journeyWrap = useRef<HTMLDivElement>(null);
-  const journeyInner = useRef<HTMLDivElement>(null);
 
   /* ── initial hero fade ── */
   useEffect(() => {
@@ -80,8 +80,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   /* ── ScrollTrigger animations (seedling) ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
-
-      /* 1. Sprouting Seedling - hero */
       if (seedlingRef.current) {
         gsap.fromTo(seedlingRef.current,
           { scale: 0.3, opacity: 0, rotation: -15 },
@@ -90,21 +88,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             scrollTrigger: { trigger: seedlingRef.current, start: "top 85%", toggleActions: "play none none none" },
           }
         );
-      }
-
-      /* 2. Journey horizontal scroll */
-      if (journeyWrap.current && journeyInner.current) {
-        const wrap = journeyWrap.current;
-        const inner = journeyInner.current;
-        gsap.to(inner, {
-          x: () => -(inner.scrollWidth - wrap.offsetWidth),
-          ease: "none",
-          scrollTrigger: {
-            trigger: wrap, pin: true, scrub: 1,
-            start: "top top", end: () => "+=" + (inner.scrollWidth - wrap.offsetWidth),
-            invalidateOnRefresh: true,
-          },
-        });
       }
     });
     return () => ctx.revert();
@@ -475,34 +458,54 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       </section>
 
       {/* ─── 3. Farm-to-Table Journey ─── */}
-      <section id="journey" style={{ background: A.bg }}>
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-4">
-          <div className="text-center max-w-2xl mx-auto">
+      <section id="journey" className="py-16 sm:py-24" style={{ background: A.card, borderTop: `1px solid ${A.border}40`, borderBottom: `1px solid ${A.border}40` }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <SubHeading>How It Travels</SubHeading>
             <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Farm-to-Table Journey</h2>
             <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
           </div>
-        </div>
-        <div ref={journeyWrap} className="relative h-[55vh]">
-          <div className="absolute top-6 inset-x-0">
-            <div ref={journeyInner} className="flex gap-6 px-[calc((100vw-72rem)/2+1.5rem)]" style={{ width: `${journeySteps.length * 380 + (journeySteps.length - 1) * 24 + 48}px` }}>
-              {journeySteps.map((step, i) => (
-                <div key={step.title} className="flex-shrink-0 w-[340px] rounded-2xl p-8 transition-all" style={{ background: A.card, border: `1px solid ${A.border}40` }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = step.color; e.currentTarget.style.transform = 'translateY(-4px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = `${A.border}40`; e.currentTarget.style.transform = 'translateY(0)'; }}>
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ background: `${step.color}20` }}>
-                    <step.icon size={28} style={{ color: step.color }} />
-                  </div>
-                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: A.green }}>Step {i + 1}</p>
-                  <h3 style={{ ...headingFont, color: A.greenDark }} className="text-xl font-bold mt-1">{step.title}</h3>
-                  <p className="text-sm mt-2 leading-relaxed" style={{ color: A.muted }}>{step.desc}</p>
-                  {i < journeySteps.length - 1 && (
-                    <div className="mt-6 flex items-center gap-2 text-xs font-semibold" style={{ color: A.green }}>
-                      Next <ArrowRight size={12} />
+
+          <div className="relative max-w-2xl mx-auto">
+            <div className="overflow-hidden rounded-2xl" style={{ border: `1px solid ${A.border}40` }}>
+              <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${journeyStep * 100}%)` }}>
+                {journeySteps.map((step, i) => (
+                  <div key={step.title} className="w-full flex-shrink-0 p-8 sm:p-10" style={{ background: A.bg }}>
+                    <div className="text-center">
+                      <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5" style={{ background: `${step.color}20`, border: `2px solid ${step.color}` }}>
+                        <step.icon size={36} style={{ color: step.color }} />
+                      </div>
+                      <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: A.green }}>Step {i + 1} of {journeySteps.length}</p>
+                      <h3 style={{ ...headingFont, color: A.greenDark }} className="text-2xl sm:text-3xl font-bold mt-2">{step.title}</h3>
+                      <p className="mt-3 text-base leading-relaxed" style={{ color: A.muted }}>{step.desc}</p>
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mt-6">
+              <button onClick={() => setJourneyStep(s => Math.max(0, s - 1))}
+                disabled={journeyStep === 0}
+                className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-30"
+                style={{ background: journeyStep > 0 ? A.greenDark : A.border, color: '#fff', border: 'none', cursor: journeyStep > 0 ? 'pointer' : 'default' }}>
+                <ChevronLeft size={16} /> Back
+              </button>
+
+              <div className="flex gap-2">
+                {journeySteps.map((_, i) => (
+                  <button key={i} onClick={() => setJourneyStep(i)}
+                    className="w-2.5 h-2.5 rounded-full transition-all border-0"
+                    style={{ background: i === journeyStep ? A.greenDark : A.border, cursor: 'pointer' }} />
+                ))}
+              </div>
+
+              <button onClick={() => setJourneyStep(s => Math.min(journeySteps.length - 1, s + 1))}
+                disabled={journeyStep === journeySteps.length - 1}
+                className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-30"
+                style={{ background: journeyStep < journeySteps.length - 1 ? A.greenDark : A.border, color: '#fff', border: 'none', cursor: journeyStep < journeySteps.length - 1 ? 'pointer' : 'default' }}>
+                Next <ChevronRight size={16} />
+              </button>
             </div>
           </div>
         </div>
