@@ -374,20 +374,15 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&h=500&fit=crop&auto=format" alt="" className="w-full h-[420px] object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #FAF8EBcc, transparent)' }} />
             </div>
-            <div className="absolute -bottom-4 -right-4 rounded-2xl p-6 shadow-xl hidden sm:block" style={{ background: A.card, border: `1px solid ${A.border}` }}>
-              <p style={{ color: A.green }} className="text-3xl font-bold">20+</p>
-              <p style={{ color: A.muted }} className="text-sm">Years of Excellence</p>
-            </div>
           </div>
           <div>
-            <SubHeading>Get to Know AgriHub</SubHeading>
+            <SubHeading>What is AgriHub?</SubHeading>
             <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">
-              AgriHub is the Digital Agriculture Governance Platform
+              A digital governance platform
             </h2>
             <div className="mt-4 w-16 h-1 rounded-full" style={{ background: A.green }} />
             <p className="mt-5 text-lg leading-relaxed" style={{ color: A.muted }}>
-              We've 20 years of agriculture farming experience. Lorem ipsum dolor sit amet, consectetur
-              adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
             </p>
             <ul className="mt-6 space-y-3">
               {[
