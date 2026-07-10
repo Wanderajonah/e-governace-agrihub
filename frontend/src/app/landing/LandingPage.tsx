@@ -49,9 +49,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [season, setSeason] = useState(50);
 
   const seedlingRef = useRef<SVGSVGElement>(null);
-  const skyRef = useRef<HTMLDivElement>(null);
-  const hillsRef = useRef<HTMLDivElement>(null);
-  const fieldRef = useRef<HTMLDivElement>(null);
   const journeyWrap = useRef<HTMLDivElement>(null);
   const journeyInner = useRef<HTMLDivElement>(null);
 
@@ -92,13 +89,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             scrollTrigger: { trigger: seedlingRef.current, start: "top 85%", toggleActions: "play none none none" },
           }
         );
-      }
-
-      /* 2. Parallax Farmscape layers */
-      if (skyRef.current && hillsRef.current && fieldRef.current) {
-        gsap.to(skyRef.current, { y: 80, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
-        gsap.to(hillsRef.current, { y: 120, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
-        gsap.to(fieldRef.current, { y: 200, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
       }
 
       /* 3. Horizontal Farm-to-Table Journey */
@@ -447,28 +437,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                 <p className="text-xs mt-1" style={{ color: A.muted }}>{desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 2. Parallax Farmscape ─── */}
-      <section id="parallax" className="relative h-[70vh] overflow-hidden" style={{ background: '#87CEEB' }}>
-        <div ref={skyRef} className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #FAF8EB 70%)',
-        }} />
-        <div ref={hillsRef} className="absolute inset-x-0 bottom-[20%] h-[40%]" style={{
-          background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2365CB3B' fill-opacity='0.4' d='M0,192L48,176C96,160,192,128,288,138.7C384,149,480,203,576,213.3C672,224,768,192,864,165.3C960,139,1056,117,1152,133.3C1248,149,1344,203,1392,229.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E")`,
-          backgroundSize: 'cover', backgroundPosition: 'bottom',
-        }} />
-        <div ref={fieldRef} className="absolute inset-x-0 bottom-0 h-[25%]" style={{
-          background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2300652F' fill-opacity='0.6' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,192C672,181,768,139,864,128C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E")`,
-          backgroundSize: 'cover', backgroundPosition: 'bottom',
-        }} />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: A.greenDark }}>Our Landscape</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-2" style={{ ...headingFont, color: A.greenDark }}>Uganda's Rich Farmlands</h2>
-            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: A.muted }}>From the green hills to the fertile fields — supporting thousands of farmers.</p>
           </div>
         </div>
       </section>
