@@ -14,6 +14,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "../components/ui/dialog";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -722,30 +723,54 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {selectedMarket && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: '#00000080' }}
           onClick={closeMarketPrices}>
-          <div className="relative w-full max-w-md rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
+          <div className="relative w-full max-w-lg rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
             onClick={e => e.stopPropagation()}>
             <button onClick={closeMarketPrices} className="absolute right-3 top-3 rounded-lg p-1.5 transition-colors" style={{ background: A.bg, color: A.muted }}>
               <X size={16} />
             </button>
             <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-2">
                 <MapPin size={18} style={{ color: A.green }} />
                 <h3 style={{ ...headingFont, color: A.greenDark }} className="text-xl font-bold">{selectedMarket.name}</h3>
               </div>
               <p className="text-sm mb-4" style={{ color: A.muted }}>{selectedMarket.location}</p>
+
               {loadingPrices ? (
-                <div className="flex items-center justify-center py-8">
+                <div className="flex items-center justify-center py-12">
                   <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: `${A.green}30`, borderTopColor: A.green }} />
                 </div>
               ) : (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {marketPrices.slice(0, 10).map((p: any, i: number) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
-                      <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
-                      <span className="text-sm font-bold" style={{ color: A.greenDark }}>UGX {p.price?.toLocaleString() || "—"}</span>
-                    </div>
-                  ))}
-                </div>
+                <>
+                  {/* Chart */}
+                  <div className="h-48 mb-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={marketPrices.slice(0, 8)} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+                        <XAxis dataKey="commodity" tick={{ fontSize: 10, fill: A.muted }} axisLine={false} tickLine={false} interval={0} angle={-20} textAnchor="end" height={40} />
+                        <YAxis tick={{ fontSize: 10, fill: A.muted }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v/1000).toFixed(0)}k` : v} />
+                        <Tooltip
+                          contentStyle={{ borderRadius: 8, border: `1px solid ${A.border}`, fontSize: 12, background: A.card }}
+                          formatter={(value: number) => [`UGX ${value.toLocaleString()}`, "Price"]}
+                          labelStyle={{ fontWeight: 600, color: A.greenDark, marginBottom: 4 }}
+                        />
+                        <Bar dataKey="price" radius={[6, 6, 0, 0]} maxBarSize={36}>
+                          {marketPrices.slice(0, 8).map((_, i) => (
+                            <Cell key={i} fill={[A.green, A.greenDark, A.amber, "#B5CBC5", A.green, A.greenDark, A.amber, "#B5CBC5"][i % 8]} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Price list */}
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                    {marketPrices.slice(0, 10).map((p: any, i: number) => (
+                      <div key={i} className="flex items-center justify-between p-2.5 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
+                        <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
+                        <span className="text-sm font-bold" style={{ color: A.greenDark }}>UGX {p.price?.toLocaleString() || "—"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </div>
