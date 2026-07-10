@@ -3,5 +3,13 @@
   import App from "./app/App.tsx";
   import "./styles/index.css";
 
-  createRoot(document.getElementById("root")!).render(<App />);
+  const root = createRoot(document.getElementById("root")!);
+  root.render(<App />);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const el = document.getElementById("splash");
+      if (el) el.classList.add("hidden");
+    });
+  });
   

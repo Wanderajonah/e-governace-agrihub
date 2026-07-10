@@ -7,6 +7,7 @@ import {
 } from "./auth/rbac";
 import type { Role } from "./auth/rbac";
 import * as api from "../api";
+import LandingPage from "./landing/LandingPage";
 import {
   LayoutDashboard,
   Users,
@@ -6667,7 +6668,7 @@ export default function App() {
   };
 
   if (!loggedIn) {
-    return <LoginScreen onLogin={handleLogin} />;
+    return <LandingPage onLogin={handleLogin} />;
   }
 
   const screenMap: Record<Screen, React.ReactNode> = {
