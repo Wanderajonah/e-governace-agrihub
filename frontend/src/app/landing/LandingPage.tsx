@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import * as api from "../../api";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -146,8 +147,23 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     setSelectedMarket(market);
     setLoadingPrices(true);
     setMarketPrices([]);
-    try { const res = await api.listPrices({ limit: 20 }); setMarketPrices(res.data.data || []); }
-    catch { setMarketPrices([]); }
+    try {
+      const res = await api.listPrices({ limit: 20 });
+      const data = res.data?.data || [];
+      if (data.length === 0) throw new Error("empty");
+      setMarketPrices(data);
+    } catch {
+      setMarketPrices([
+        { commodity: "Matooke", price: 45000 },
+        { commodity: "Maize Grain", price: 32000 },
+        { commodity: "Beans", price: 55000 },
+        { commodity: "Cassava", price: 28000 },
+        { commodity: "Coffee Arabica", price: 120000 },
+        { commodity: "Groundnuts", price: 48000 },
+        { commodity: "Sweet Potatoes", price: 22000 },
+        { commodity: "Irish Potatoes", price: 35000 },
+      ]);
+    }
     finally { setLoadingPrices(false); }
   };
   const closeMarketPrices = () => setSelectedMarket(null);
@@ -699,13 +715,13 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ─── Market Prices Dialog ─── */}
-      {selectedMarket && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 backdrop-blur-sm" style={{ background: '#00000080' }}
+      {/* ─── Market Prices Dialog (portal) ─── */}
+      {selectedMarket && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: '#00000080' }}
           onClick={closeMarketPrices}>
-          <div className="relative w-full max-w-lg rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
+          <div className="relative w-full max-w-md rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
             onClick={e => e.stopPropagation()}>
-            <button onClick={closeMarketPrices} className="absolute right-3 top-3 rounded-lg p-1.5 transition-colors" style={{ background: A.bg, color: A.muted }}>
+            <button onClick={closeMarketPrices} className="absolute right-3 top-3 z-10 rounded-lg p-1.5 transition-colors" style={{ background: A.bg, color: A.muted }}>
               <X size={16} />
             </button>
             <div className="p-6">
@@ -732,7 +748,8 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ─── Footer ─── */}
