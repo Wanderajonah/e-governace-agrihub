@@ -437,9 +437,14 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── Brand Strip ─── */}
       <div className="py-10" style={{ borderBottom: `1px solid ${A.border}40` }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex items-center justify-center gap-8 sm:gap-12 flex-wrap opacity-40">
-            {["Brand 1", "Brand 2", "Brand 3", "Brand 4", "Brand 5"].map((b) => (
-              <div key={b} className="text-lg font-bold" style={{ color: A.muted }}>{b}</div>
+          <div className="flex items-center justify-center gap-10 sm:gap-16 flex-wrap opacity-50">
+            {[
+              { src: "https://images.seeklogo.com/logo-png/28/1/kcca-kampala-capital-city-authority-logo-png_seeklogo-280003.png", alt: "KCCA" },
+              { src: "https://images.seeklogo.com/logo-png/54/1/uganda-bureau-of-statistics-ubos-logo-png_seeklogo-548891.png", alt: "UBOS" },
+              { src: "https://createa.agriculture.go.ug/sites/default/files/MAAIF_LOGO-XXXX-re.png", alt: "MAAIF" },
+            ].map((brand) => (
+              <img key={brand.alt} src={brand.src} alt={brand.alt}
+                className="h-10 sm:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300" />
             ))}
           </div>
         </div>
@@ -765,7 +770,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                   <Mail size={12} style={{ color: A.green }} /> admin@agrihub.com
                 </li>
                 <li className="flex items-center gap-2">
-                  <MapPin size={12} style={{ color: A.green }} /> 80 Broklyn Golden Street. USA
+                  <MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda
                 </li>
               </ul>
             </div>
