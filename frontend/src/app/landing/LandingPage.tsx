@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import * as api from "../../api";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Leaf, Menu, X, Users, Package, ShieldCheck, TrendingUp,
   ArrowLeftRight, BarChart2, CheckSquare, Tag, ArrowRight,
@@ -14,6 +16,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../components/ui/dialog";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Screen =
   | "login"
@@ -63,6 +67,25 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [selectedMarket, setSelectedMarket] = useState<any>(null);
   const [marketPrices, setMarketPrices] = useState<any[]>([]);
   const [loadingPrices, setLoadingPrices] = useState(false);
+
+  const heroRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const countersRef = useRef<HTMLDivElement>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+  const marketsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (heroRef.current) gsap.from(heroRef.current.children, { y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" });
+      if (servicesRef.current) gsap.from(servicesRef.current.children, { y: 30, opacity: 0, duration: 0.6, stagger: 0.1, scrollTrigger: { trigger: servicesRef.current, start: "top 85%" } });
+      if (featuresRef.current) gsap.from(featuresRef.current.children, { y: 20, opacity: 0, duration: 0.5, stagger: 0.08, scrollTrigger: { trigger: featuresRef.current, start: "top 85%" } });
+      if (countersRef.current) gsap.from(countersRef.current.children, { scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.1, scrollTrigger: { trigger: countersRef.current, start: "top 85%" } });
+      if (testimonialsRef.current) gsap.from(testimonialsRef.current.children, { y: 30, opacity: 0, duration: 0.6, stagger: 0.15, scrollTrigger: { trigger: testimonialsRef.current, start: "top 85%" } });
+      if (marketsRef.current) gsap.from(marketsRef.current.children, { y: 30, opacity: 0, duration: 0.6, stagger: 0.1, scrollTrigger: { trigger: marketsRef.current, start: "top 85%" } });
+    });
+    return () => ctx.revert();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -319,7 +342,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1600&h=900&fit=crop&auto=format" alt="" className="h-full w-full object-cover" />
         </div>
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${A.greenDark} 0%, ${A.greenDark}cc 40%, transparent 70%)` }} />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
+          <div ref={heroRef} className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
           <div className="max-w-2xl">
 
             <h1 style={{ ...headingFont, lineHeight: '1.05' }} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
@@ -398,7 +421,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div ref={servicesRef} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {services.map(({ icon: Icon, title, desc }) => (
               <div key={title}
                 className="group rounded-2xl p-6 transition-all duration-300"
@@ -452,7 +475,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div ref={featuresRef} className="grid grid-cols-2 gap-3">
             {features.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="rounded-xl p-4 transition-all" style={{ background: A.card, border: `1px solid ${A.border}40` }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; }}
@@ -494,7 +517,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">What They're talking about</h2>
           <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div ref={testimonialsRef} className="grid gap-6 md:grid-cols-3">
           {testimonials.map(({ name, role, quote, initial }) => (
             <div key={name} className="rounded-2xl p-8 transition-all" style={{ background: A.card, border: `1px solid ${A.border}40` }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.06)'; }}
@@ -518,7 +541,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── Counters ─── */}
       <section className="py-16" style={{ background: A.greenDark }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div ref={countersRef} className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { label: "Agriculture Products", value: "2,847" },
               { label: "Projects completed", value: "1,234" },
@@ -542,7 +565,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div ref={marketsRef} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {markets.map((market, i) => (
             <article key={market.name} onClick={() => viewMarketPrices(market)}
               className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
