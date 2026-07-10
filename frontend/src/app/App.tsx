@@ -2301,10 +2301,10 @@ function FarmersScreen() {
       </PageHeader>
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.06)] overflow-hidden">
-        <div className="flex flex-wrap items-center gap-4 px-6 py-4 border-b border-gray-200">
+        <div className="flex flex-wrap items-center gap-3 px-5 py-3 border-b border-gray-200">
           <SearchBar
             placeholder="Search by name, ID, district..."
-            className="flex-1 min-w-[220px]"
+            className="flex-1 min-w-[200px]"
           />
           <Select
             options={[
@@ -2318,99 +2318,111 @@ function FarmersScreen() {
             ]}
           />
           <Select options={["All Status", "Active", "Inactive", "Pending"]} />
-          <Btn icon={Filter} variant="outline" size="sm">
-            Filter
-          </Btn>
         </div>
 
-        <Table
-          headers={[
-            "Farmer ID",
-            "Name",
-            "District",
-            "Phone",
-            "Produce",
-            "Status",
-            "Registered",
-            "Actions",
-          ]}
-          headerClassNames={[
-            "sticky left-0 bg-gray-50/80 z-10 after:absolute after:right-0 after:top-3 after:h-[calc(100%-24px)] after:w-px after:bg-gray-200",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-          ]}
-        >
-          {farmerList.map((f) => (
-            <tr
-              key={f.id || f._id}
-              className="hover:bg-gray-50/60 transition-colors"
-            >
-              <Td className="sticky left-0 bg-white z-10 after:absolute after:right-0 after:top-3 after:h-[calc(100%-24px)] after:w-px after:bg-gray-100">
-                <span className="font-mono text-xs text-green-700 font-semibold">
-                  {f.id || f.farmerId}
-                </span>
-              </Td>
-              <Td>
-                <button
-                  onClick={() => selectFarmer(f)}
-                  className="font-semibold text-gray-800 hover:text-green-700 transition-colors"
+        <div className="overflow-x-auto">
+          <table
+            className="w-full text-[13px]"
+            style={{ borderCollapse: "separate", borderSpacing: 0 }}
+          >
+            <thead>
+              <tr className="border-b border-gray-200 bg-gray-50/80">
+                {[
+                  "Farmer ID", "Name", "District", "Phone",
+                  "Produce", "Status", "Registered", "Actions",
+                ].map((h) => (
+                  <th
+                    key={h}
+                    className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider h-[48px] px-5 whitespace-nowrap align-middle"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {farmerList.map((f) => (
+                <tr
+                  key={f.id || f._id}
+                  className="hover:bg-gray-50/60 transition-colors"
                 >
-                  {f.name}
-                </button>
-              </Td>
-              <Td>{f.district}</Td>
-              <Td className="text-gray-500">{f.phone}</Td>
-              <Td>
-                <span className="text-gray-600">{f.produce}</span>
-              </Td>
-              <Td>
-                <Badge label={f.status} color={COLORS.primary} />
-              </Td>
-              <Td className="text-gray-400">{f.registered}</Td>
-              <Td>
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => selectFarmer(f)}
-                    className="w-8 h-8 rounded-lg hover:bg-blue-50 text-gray-400 hover:text-blue-600 transition-colors flex items-center justify-center"
-                  >
-                    <Eye size={14} />
-                  </button>
-                  <button
-                    onClick={() => openEditModal(f)}
-                    className="w-8 h-8 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-600 transition-colors flex items-center justify-center"
-                  >
-                    <Edit3 size={14} />
-                  </button>
-                  <button
-                    onClick={() => setDeletingFarmer(f)}
-                    className="w-8 h-8 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors flex items-center justify-center"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </Td>
-            </tr>
-          ))}
-        </Table>
+                  <td className="py-3 px-5 text-gray-700 align-middle">
+                    <span className="font-mono text-xs text-green-700 font-semibold">
+                      {f.id || f.farmerId}
+                    </span>
+                  </td>
+                  <td className="py-3 px-5 text-gray-700 align-middle">
+                    <button
+                      onClick={() => selectFarmer(f)}
+                      className="font-medium text-gray-800 hover:text-green-700 transition-colors"
+                    >
+                      {f.name}
+                    </button>
+                  </td>
+                  <td className="py-3 px-5 text-gray-700 align-middle">{f.district}</td>
+                  <td className="py-3 px-5 text-gray-500 align-middle">{f.phone}</td>
+                  <td className="py-3 px-5 text-gray-600 align-middle">{f.produce}</td>
+                  <td className="py-3 px-5 align-middle">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                      {f.status}
+                    </span>
+                  </td>
+                  <td className="py-3 px-5 text-gray-400 align-middle">{f.registered}</td>
+                  <td className="py-3 px-5 align-middle">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => selectFarmer(f)}
+                        className="text-xs font-medium text-gray-500 hover:text-green-700 transition-colors flex items-center gap-1"
+                      >
+                        <Eye size={13} /> View
+                      </button>
+                      <button
+                        onClick={() => openEditModal(f)}
+                        className="text-xs font-medium text-gray-500 hover:text-emerald-600 transition-colors flex items-center gap-1"
+                      >
+                        <Edit3 size={13} /> Edit
+                      </button>
+                      <button
+                        onClick={() => setDeletingFarmer(f)}
+                        className="text-xs font-medium text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1"
+                      >
+                        <Trash2 size={13} /> Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 text-sm">
-          <span className="text-gray-500">
-            Showing 1–{farmerList.length} of {totalFarmers} farmers
-          </span>
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between px-5 py-3 border-t border-gray-200">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>Show</span>
+            <select className="text-xs bg-gray-50 border border-gray-200 rounded px-2 py-1 text-gray-600">
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+            <span>per page</span>
+          </div>
+          <div className="flex items-center gap-1">
             {[1, 2, 3, "...", 48].map((p, i) => (
               <button
                 key={i}
-                className={`w-8 h-8 text-xs font-medium rounded-lg flex items-center justify-center transition-colors ${p === 1 ? "bg-green-700 text-white shadow-sm" : "text-gray-500 hover:bg-gray-100"}`}
+                className={`min-w-[32px] h-8 text-xs font-medium rounded-md flex items-center justify-center transition-colors ${
+                  p === 1
+                    ? "bg-green-700 text-white shadow-sm"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
               >
                 {p}
               </button>
             ))}
+          </div>
+          <div className="text-xs text-gray-500">
+            Showing 1–{farmerList.length} of {totalFarmers}
           </div>
         </div>
       </div>
