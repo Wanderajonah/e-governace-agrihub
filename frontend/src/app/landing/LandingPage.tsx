@@ -183,10 +183,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   ];
 
   const markets = [
-    { name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk", image: "https://images.unsplash.com/photo-1605117882932-f9e32f03b11b?w=600&h=400&fit=crop&auto=format" },
-    { name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk", image: "https://images.unsplash.com/photo-1580924559457-5e3f7a9d7a7b?w=600&h=400&fit=crop&auto=format" },
-    { name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&h=400&fit=crop&auto=format" },
-    { name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk", image: "https://images.unsplash.com/photo-1527683611643-c5f4dbc7f63b?w=600&h=400&fit=crop&auto=format" },
+    { name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk", image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=400&fit=crop&auto=format" },
+    { name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk", image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&h=400&fit=crop&auto=format" },
   ];
 
   const faqs = [
