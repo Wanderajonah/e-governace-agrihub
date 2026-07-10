@@ -144,6 +144,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const closePortal = () => { setShowPortal(false); setLoginError(""); };
 
   const viewMarketPrices = async (market: any) => {
+    alert("clicked: " + market.name);
     setSelectedMarket(market);
     setLoadingPrices(true);
     setMarketPrices([]);
