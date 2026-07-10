@@ -369,7 +369,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── About ─── */}
       <section id="about" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="grid gap-12 lg:grid-cols-2 items-center">
-          <div className="relative">
+          <div className="hidden lg:block relative">
             <div className="relative rounded-2xl overflow-hidden" style={{ border: `1px solid ${A.border}` }}>
               <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&h=500&fit=crop&auto=format" alt="" className="w-full h-[420px] object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #FAF8EBcc, transparent)' }} />
