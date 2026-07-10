@@ -437,14 +437,14 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       {/* ─── Brand Strip ─── */}
       <div className="py-10" style={{ borderBottom: `1px solid ${A.border}40` }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex items-center justify-center gap-10 sm:gap-16 flex-wrap opacity-50">
+          <div className="flex items-center justify-center gap-12 sm:gap-20 flex-wrap">
             {[
               { src: "https://images.seeklogo.com/logo-png/28/1/kcca-kampala-capital-city-authority-logo-png_seeklogo-280003.png", alt: "KCCA" },
               { src: "https://images.seeklogo.com/logo-png/54/1/uganda-bureau-of-statistics-ubos-logo-png_seeklogo-548891.png", alt: "UBOS" },
               { src: "https://createa.agriculture.go.ug/sites/default/files/MAAIF_LOGO-XXXX-re.png", alt: "MAAIF" },
             ].map((brand) => (
               <img key={brand.alt} src={brand.src} alt={brand.alt}
-                className="h-10 sm:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300" />
+                className="h-16 sm:h-20 w-auto object-contain" />
             ))}
           </div>
         </div>
