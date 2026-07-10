@@ -717,35 +717,42 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       </section>
 
       {/* ─── Market Prices Dialog (portal) ─── */}
-      {selectedMarket && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: '#00000080' }}
+      {createPortal(
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-200 ${selectedMarket ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}
+          style={{ background: selectedMarket ? '#00000080' : 'transparent' }}
           onClick={closeMarketPrices}>
-          <div className="relative w-full max-w-md rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
+          <div className="relative w-full max-w-md rounded-2xl shadow-2xl transition-all duration-200" style={{ background: A.card, border: `1px solid ${A.border}`, transform: selectedMarket ? 'scale(1)' : 'scale(0.95)' }}
             onClick={e => e.stopPropagation()}>
             <button onClick={closeMarketPrices} className="absolute right-3 top-3 z-10 rounded-lg p-1.5 transition-colors" style={{ background: A.bg, color: A.muted }}>
               <X size={16} />
             </button>
             <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <MapPin size={18} style={{ color: A.green }} />
-                <h3 style={{ ...headingFont, color: A.greenDark }} className="text-xl font-bold">{selectedMarket.name}</h3>
-              </div>
-              <p className="text-sm mb-4" style={{ color: A.muted }}>{selectedMarket.location}</p>
-              {loadingPrices ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: `${A.green}30`, borderTopColor: A.green }} />
-                </div>
-              ) : marketPrices.length === 0 ? (
-                <p className="text-sm text-center py-8" style={{ color: A.muted }}>No price data available for this market.</p>
-              ) : (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {marketPrices.slice(0, 10).map((p: any, i: number) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
-                      <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
-                      <span className="text-sm font-bold" style={{ color: A.greenDark }}>UGX {p.price?.toLocaleString() || "—"}</span>
+              {selectedMarket ? (
+                <>
+                  <div className="flex items-center gap-3 mb-4">
+                    <MapPin size={18} style={{ color: A.green }} />
+                    <h3 style={{ ...headingFont, color: A.greenDark }} className="text-xl font-bold">{selectedMarket.name}</h3>
+                  </div>
+                  <p className="text-sm mb-4" style={{ color: A.muted }}>{selectedMarket.location}</p>
+                  {loadingPrices ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: `${A.green}30`, borderTopColor: A.green }} />
                     </div>
-                  ))}
-                </div>
+                  ) : marketPrices.length === 0 ? (
+                    <p className="text-sm text-center py-8" style={{ color: A.muted }}>No price data available.</p>
+                  ) : (
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                      {marketPrices.slice(0, 10).map((p: any, i: number) => (
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
+                          <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
+                          <span className="text-sm font-bold" style={{ color: A.greenDark }}>UGX {p.price?.toLocaleString() || "—"}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-sm text-center py-4" style={{ color: A.muted }}>Click a market to view prices</p>
               )}
             </div>
           </div>
