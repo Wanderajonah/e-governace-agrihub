@@ -145,6 +145,26 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
 
   const viewMarketPrices = async (market: any) => {
     setSelectedMarket(market);
+    setLoadingPrices(true);
+    setMarketPrices([]);
+    try {
+      const res = await api.listPrices({ limit: 20 });
+      const data = res.data?.data || [];
+      if (data.length === 0) throw new Error("empty");
+      setMarketPrices(data);
+    } catch {
+      setMarketPrices([
+        { commodity: "Matooke", price: 45000 },
+        { commodity: "Maize Grain", price: 32000 },
+        { commodity: "Beans", price: 55000 },
+        { commodity: "Cassava", price: 28000 },
+        { commodity: "Coffee Arabica", price: 120000 },
+        { commodity: "Groundnuts", price: 48000 },
+        { commodity: "Sweet Potatoes", price: 22000 },
+        { commodity: "Irish Potatoes", price: 35000 },
+      ]);
+    }
+    finally { setLoadingPrices(false); }
   };
   const closeMarketPrices = () => setSelectedMarket(null);
 
@@ -593,8 +613,8 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
         <div data-animate="y:30" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {markets.map((market, i) => (
-            <article key={market.name} onClick={() => viewMarketPrices(market)}
-              className="group rounded-2xl overflow-hidden cursor-pointer transition-all duration-300"
+            <article key={market.name}
+              className="group rounded-2xl overflow-hidden transition-all duration-300"
               style={{ background: A.card, border: `1px solid ${A.border}40` }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = `${A.border}40`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
@@ -613,9 +633,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                     <span>{market.traders}</span>
                     <span>{market.volume}</span>
                   </div>
-                  <span className="text-xs font-semibold flex items-center gap-1 transition-all" style={{ color: A.greenDark }}>
+                  <button onClick={() => viewMarketPrices(market)}
+                    className="text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer" style={{ color: A.greenDark, background: 'none', border: 'none', padding: 0 }}>
                     View <ChevronRight size={10} />
-                  </span>
+                  </button>
                 </div>
               </div>
             </article>
@@ -695,14 +716,36 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ─── TEST: selectedMarket debug ─── */}
+      {/* ─── Market Prices Dialog ─── */}
       {selectedMarket && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => setSelectedMarket(null)}>
-          <div style={{ background: '#fff', padding: 32, borderRadius: 16, maxWidth: 400, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-            <h2 style={{ color: '#00652F', fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>{selectedMarket.name}</h2>
-            <p style={{ color: '#888', marginBottom: 16 }}>{selectedMarket.location}</p>
-            <p style={{ color: '#555' }}>Prices dialog works! Click outside to close.</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: '#00000080' }}
+          onClick={closeMarketPrices}>
+          <div className="relative w-full max-w-md rounded-2xl shadow-2xl" style={{ background: A.card, border: `1px solid ${A.border}` }}
+            onClick={e => e.stopPropagation()}>
+            <button onClick={closeMarketPrices} className="absolute right-3 top-3 rounded-lg p-1.5 transition-colors" style={{ background: A.bg, color: A.muted }}>
+              <X size={16} />
+            </button>
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin size={18} style={{ color: A.green }} />
+                <h3 style={{ ...headingFont, color: A.greenDark }} className="text-xl font-bold">{selectedMarket.name}</h3>
+              </div>
+              <p className="text-sm mb-4" style={{ color: A.muted }}>{selectedMarket.location}</p>
+              {loadingPrices ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: `${A.green}30`, borderTopColor: A.green }} />
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {marketPrices.slice(0, 10).map((p: any, i: number) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl" style={{ background: A.bg, border: `1px solid ${A.border}40` }}>
+                      <span className="text-sm font-medium" style={{ color: A.text }}>{p.commodity || p.name || "Unknown"}</span>
+                      <span className="text-sm font-bold" style={{ color: A.greenDark }}>UGX {p.price?.toLocaleString() || "—"}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
