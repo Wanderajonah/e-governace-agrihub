@@ -644,6 +644,10 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
+      <div style={{ position: 'fixed', bottom: 0, right: 0, background: '#fff', border: '1px solid red', padding: 8, fontSize: 12, zIndex: 99998 }}>
+        market: {selectedMarket?.name || "none"} | loading: {String(loadingPrices)} | count: {marketPrices.length}
+      </div>
+
       {/* ─── FAQ ─── */}
       <section className="py-16 sm:py-24" style={{ background: A.card, borderTop: `1px solid ${A.border}40`, borderBottom: `1px solid ${A.border}40` }}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
