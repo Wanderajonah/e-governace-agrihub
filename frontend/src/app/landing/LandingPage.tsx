@@ -1,50 +1,32 @@
 import { useState, useEffect, useRef } from "react";
 import * as api from "../../api";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Leaf, Menu, X, Users, Package, ShieldCheck, TrendingUp,
   ArrowLeftRight, BarChart2, CheckSquare, Tag, ArrowRight,
   MapPin, Mail, Phone, Clock, ChevronRight, Star, Quote,
   Facebook, Twitter, Linkedin, Instagram, Send, ChevronDown,
-  ChevronUp, Lock, Flower2, Sprout,
+  ChevronUp, Lock, Flower2, Sprout, Sun, Snowflake,
 } from "lucide-react";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "../components/ui/dialog";
 
-type Screen =
-  | "login"
-  | "dashboard"
-  | "farmers"
-  | "produce-registration"
-  | "produce-verification"
-  | "commodity-prices"
-  | "transactions"
-  | "market-analytics"
-  | "reports"
-  | "government"
-  | "users"
-  | "notifications"
-  | "settings";
+gsap.registerPlugin(ScrollTrigger);
 
-interface LandingPageProps {
-  onLogin: (token: string, user: any) => void;
-}
+type Screen =
+  | "login" | "dashboard" | "farmers" | "produce-registration"
+  | "produce-verification" | "commodity-prices" | "transactions"
+  | "market-analytics" | "reports" | "government" | "users"
+  | "notifications" | "settings";
+
+interface LandingPageProps { onLogin: (token: string, user: any) => void; }
 
 const A = {
-  bg: "#FAF8EB",
-  card: "#ffffff",
-  border: "#B5CBC5",
-  green: "#65CB3B",
-  greenDark: "#00652F",
-  heading: "#00652F",
-  amber: "#f39c12",
-  text: "#555555",
-  muted: "#888888",
+  bg: "#FAF8EB", card: "#ffffff", border: "#B5CBC5",
+  green: "#65CB3B", greenDark: "#00652F", heading: "#00652F",
+  amber: "#f39c12", text: "#555555", muted: "#888888",
 };
 
 const headingFont = { fontFamily: "'Bricolage Grotesque', sans-serif" };
@@ -64,11 +46,21 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [selectedMarket, setSelectedMarket] = useState<any>(null);
   const [marketPrices, setMarketPrices] = useState<any[]>([]);
   const [loadingPrices, setLoadingPrices] = useState(false);
+  const [season, setSeason] = useState(50);
 
+  const seedlingRef = useRef<SVGSVGElement>(null);
+  const skyRef = useRef<HTMLDivElement>(null);
+  const hillsRef = useRef<HTMLDivElement>(null);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const journeyWrap = useRef<HTMLDivElement>(null);
+  const journeyInner = useRef<HTMLDivElement>(null);
+
+  /* ── initial hero fade ── */
   useEffect(() => {
     gsap.from("[data-hero-children] > *", { y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" });
   }, []);
 
+  /* ── intersection observer for basic reveals ── */
   useEffect(() => {
     const els = document.querySelectorAll("[data-animate]");
     const obs = new IntersectionObserver((entries) => {
@@ -87,6 +79,46 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     return () => obs.disconnect();
   }, []);
 
+  /* ── ScrollTrigger animations (seedling, parallax, journey) ── */
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+
+      /* 1. Sprouting Seedling - hero */
+      if (seedlingRef.current) {
+        gsap.fromTo(seedlingRef.current,
+          { scale: 0.3, opacity: 0, rotation: -15 },
+          {
+            scale: 1, opacity: 1, rotation: 0, duration: 2, ease: "back.out(2)",
+            scrollTrigger: { trigger: seedlingRef.current, start: "top 85%", toggleActions: "play none none none" },
+          }
+        );
+      }
+
+      /* 2. Parallax Farmscape layers */
+      if (skyRef.current && hillsRef.current && fieldRef.current) {
+        gsap.to(skyRef.current, { y: 80, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
+        gsap.to(hillsRef.current, { y: 120, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
+        gsap.to(fieldRef.current, { y: 200, ease: "none", scrollTrigger: { trigger: "#parallax", scrub: 1, start: "top bottom", end: "bottom top" } });
+      }
+
+      /* 3. Horizontal Farm-to-Table Journey */
+      if (journeyWrap.current && journeyInner.current) {
+        const inner = journeyInner.current;
+        const wrap = journeyWrap.current;
+        gsap.to(inner, {
+          x: () => -(inner.scrollWidth - wrap.offsetWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: wrap, pin: true, scrub: 1,
+            start: "top top", end: () => "+=" + (inner.scrollWidth - wrap.offsetWidth),
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+    });
+    return () => ctx.revert();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoggingIn(true);
@@ -99,9 +131,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       const msg = err.response?.data?.message;
       const detail = err.response?.data?.errors?.[0];
       setLoginError(detail || msg || "Login failed. Please check your credentials.");
-    } finally {
-      setLoggingIn(false);
-    }
+    } finally { setLoggingIn(false); }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -116,9 +146,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       const msg = err.response?.data?.message;
       const detail = err.response?.data?.errors?.[0];
       setLoginError(detail || msg || "Registration failed. Please try again.");
-    } finally {
-      setLoggingIn(false);
-    }
+    } finally { setLoggingIn(false); }
   };
 
   const openPortal = () => setShowPortal(true);
@@ -128,10 +156,8 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     setSelectedMarket(market);
     setLoadingPrices(true);
     setMarketPrices([]);
-    try {
-      const res = await api.listPrices({ limit: 20 });
-      setMarketPrices(res.data.data || []);
-    } catch { setMarketPrices([]); }
+    try { const res = await api.listPrices({ limit: 20 }); setMarketPrices(res.data.data || []); }
+    catch { setMarketPrices([]); }
     finally { setLoadingPrices(false); }
   };
   const closeMarketPrices = () => setSelectedMarket(null);
@@ -139,106 +165,61 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
+    { href: "#journey", label: "Journey" },
     { href: "#markets", label: "Prices" },
     { href: "#contact", label: "Contact" },
   ];
 
   const services = [
-    {
-      icon: Users,
-      title: "Farmers Registry",
-      desc: "Centralized digital database of all registered farmers with comprehensive profiles and certification history.",
-    },
-    {
-      icon: Package,
-      title: "Produce Tracking",
-      desc: "End-to-end traceability from harvest to market, ensuring transparency in the agricultural supply chain.",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Quality Control",
-      desc: "Standardized inspection and verification processes that certify produce quality before market entry.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Market Intelligence",
-      desc: "Real-time price monitoring, demand forecasting, and market analytics for better decision-making.",
-    },
+    { icon: Users, title: "Farmers Registry", desc: "Centralized digital database of all registered farmers with comprehensive profiles and certification history." },
+    { icon: Package, title: "Produce Tracking", desc: "End-to-end traceability from harvest to market, ensuring transparency in the agricultural supply chain." },
+    { icon: ShieldCheck, title: "Quality Control", desc: "Standardized inspection and verification processes that certify produce quality before market entry." },
+    { icon: TrendingUp, title: "Market Intelligence", desc: "Real-time price monitoring, demand forecasting, and market analytics for better decision-making." },
   ];
 
   const features = [
-    {
-      icon: Leaf,
-      title: "Farmer Registration",
-      desc: "Digitally register and manage farmer profiles with complete traceability and history.",
-    },
-    {
-      icon: CheckSquare,
-      title: "Produce Management",
-      desc: "Track produce from farm gate through quality verification with full chain-of-custody.",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Quality Assurance",
-      desc: "Standardised inspection workflows to ensure only quality produce reaches consumers.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Price Intelligence",
-      desc: "Real-time commodity pricing with historical trends for informed trading decisions.",
-    },
-    {
-      icon: ArrowLeftRight,
-      title: "Transaction Recording",
-      desc: "Secure digital recording of all market transactions with instant receipt generation.",
-    },
-    {
-      icon: BarChart2,
-      title: "Analytics & Reports",
-      desc: "Comprehensive dashboards with exportable reports for data-driven governance.",
-    },
+    { icon: Leaf, title: "Farmer Registration", desc: "Digitally register and manage farmer profiles with complete traceability and history." },
+    { icon: CheckSquare, title: "Produce Management", desc: "Track produce from farm gate through quality verification with full chain-of-custody." },
+    { icon: ShieldCheck, title: "Quality Assurance", desc: "Standardised inspection workflows to ensure only quality produce reaches consumers." },
+    { icon: TrendingUp, title: "Price Intelligence", desc: "Real-time commodity pricing with historical trends for informed trading decisions." },
+    { icon: ArrowLeftRight, title: "Transaction Recording", desc: "Secure digital recording of all market transactions with instant receipt generation." },
+    { icon: BarChart2, title: "Analytics & Reports", desc: "Comprehensive dashboards with exportable reports for data-driven governance." },
   ];
 
   const testimonials = [
-    {
-      name: "Sarah Tendo", role: "Market Officer, Nakasero",
-      quote: "AgriHub transformed our market management. Registration that took days now takes minutes. The data quality is unmatched.", initial: "ST",
-    },
-    {
-      name: "David Okello", role: "Analyst, Ministry of Agriculture",
-      quote: "Real-time market data has fundamentally changed how we formulate agricultural policy. This is the future of governance.", initial: "DO",
-    },
-    {
-      name: "Grace Akello", role: "Farmer, Wakiso District",
-      quote: "I see fair prices before leaving my farm. AgriHub gives smallholder farmers a voice in the market.", initial: "GA",
-    },
+    { name: "Sarah Tendo", role: "Market Officer, Nakasero", quote: "AgriHub transformed our market management. Registration that took days now takes minutes. The data quality is unmatched.", initial: "ST" },
+    { name: "David Okello", role: "Analyst, Ministry of Agriculture", quote: "Real-time market data has fundamentally changed how we formulate agricultural policy. This is the future of governance.", initial: "DO" },
+    { name: "Grace Akello", role: "Farmer, Wakiso District", quote: "I see fair prices before leaving my farm. AgriHub gives smallholder farmers a voice in the market.", initial: "GA" },
   ];
 
   const markets = [
-    {
-      name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk",
-      image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&h=400&fit=crop&auto=format",
-    },
-    {
-      name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk",
-      image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&auto=format",
-    },
-    {
-      name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk",
-      image: "https://images.unsplash.com/photo-1498579687547-5b8da6e0f12b?w=600&h=400&fit=crop&auto=format",
-    },
-    {
-      name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop&auto=format",
-    },
+    { name: "Nakasero Market", location: "Kampala Central", traders: "1,200+", volume: "450 tons/wk", image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kalerwe Market", location: "Kawempe Division", traders: "850+", volume: "280 tons/wk", image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&auto=format" },
+    { name: "Kireka Market", location: "Wakiso District", traders: "600+", volume: "190 tons/wk", image: "https://images.unsplash.com/photo-1498579687547-5b8da6e0f12b?w=600&h=400&fit=crop&auto=format" },
+    { name: "Owino Market", location: "Kampala Central", traders: "2,000+", volume: "600 tons/wk", image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop&auto=format" },
   ];
-
 
   const faqs = [
     { q: "Who can use AgriHub?", a: "AgriHub is designed for market officers, farmers, traders, government officials, and agricultural analysts. Each role has specific permissions and dashboards tailored to their needs." },
     { q: "Is AgriHub free for farmers?", a: "Yes, farmers can register and access market prices, track their produce, and view transaction history at no cost." },
     { q: "How does quality verification work?", a: "Certified inspectors examine produce upon arrival at the market, log quality assessments against national standards, and issue digital certificates." },
     { q: "Can I access market prices from my phone?", a: "Absolutely. AgriHub is fully responsive and works on all devices. Farmers can check real-time prices from any smartphone." },
+  ];
+
+  const journeySteps = [
+    { title: "Farm Gate", icon: Leaf, desc: "Farmers harvest and register produce at the source.", color: "#65CB3B" },
+    { title: "Quality Check", icon: ShieldCheck, desc: "Inspectors verify and certify produce quality.", color: "#f39c12" },
+    { title: "Market Arrival", icon: Package, desc: "Produce arrives at market for listing and pricing.", color: "#00652F" },
+    { title: "Consumer", icon: Users, desc: "Traders and consumers purchase with confidence.", color: "#65CB3B" },
+  ];
+
+  const yieldData = [
+    { label: "Maize", value: 72, color: "#65CB3B" },
+    { label: "Coffee", value: 58, color: "#f39c12" },
+    { label: "Beans", value: 85, color: "#00652F" },
+    { label: "Cassava", value: 43, color: "#B5CBC5" },
+    { label: "Matooke", value: 91, color: "#65CB3B" },
+    { label: "Groundnuts", value: 64, color: "#f39c12" },
   ];
 
   const SubHeading = ({ children }: { children: React.ReactNode }) => (
@@ -254,18 +235,12 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       <div className="hidden lg:block" style={{ background: A.greenDark, borderBottom: `1px solid ${A.greenDark}` }}>
         <div className="mx-auto max-w-6xl px-4 flex items-center justify-between h-10">
           <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.75)' }}>
-            <span className="flex items-center gap-1.5">
-              <Mail size={12} style={{ color: A.green }} /> admin@agrihub.com
-            </span>
-            <span className="flex items-center gap-1.5">
-              <MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda
-            </span>
+            <span className="flex items-center gap-1.5"><Mail size={12} style={{ color: A.green }} /> admin@agrihub.com</span>
+            <span className="flex items-center gap-1.5"><MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda</span>
           </div>
           <div className="flex items-center gap-3">
             {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
-              <a key={i} href="#" className="hover:text-white transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                <Icon size={13} />
-              </a>
+              <a key={i} href="#" className="hover:text-white transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}><Icon size={13} /></a>
             ))}
           </div>
         </div>
@@ -280,7 +255,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             </div>
             <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", color: A.greenDark }} className="text-xl font-bold tracking-tight">AgriHub</span>
           </a>
-
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <a key={link.href} href={link.href}
@@ -306,31 +280,23 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               </button>
             </div>
           </nav>
-
           <button type="button" onClick={() => setMobileOpen(!mobileOpen)}
             className="flex items-center justify-center rounded-lg p-2 lg:hidden" style={{ color: A.text }}>
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
-
         {mobileOpen && (
           <div className="px-4 pb-6 pt-4 lg:hidden" style={{ background: A.card, borderTop: `1px solid ${A.border}40` }}>
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                  className="px-3 py-2.5 text-sm font-medium rounded-lg" style={{ color: A.text }}>
-                  {link.label}
-                </a>
+                  className="px-3 py-2.5 text-sm font-medium rounded-lg" style={{ color: A.text }}>{link.label}</a>
               ))}
               <hr style={{ borderColor: `${A.border}40` }} className="my-2" />
               <button type="button" onClick={() => { setMobileOpen(false); setAuthMode("login"); openPortal(); }}
-                className="px-3 py-2.5 text-sm font-medium rounded-lg text-left" style={{ color: A.text }}>
-                Log in
-              </button>
+                className="px-3 py-2.5 text-sm font-medium rounded-lg text-left" style={{ color: A.text }}>Log in</button>
               <button type="button" onClick={() => { setMobileOpen(false); setAuthMode("register"); openPortal(); }}
-                className="px-4 py-2.5 text-sm font-semibold text-white rounded-lg text-left" style={{ background: A.greenDark }}>
-                Get Started
-              </button>
+                className="px-4 py-2.5 text-sm font-semibold text-white rounded-lg text-left" style={{ background: A.greenDark }}>Get Started</button>
             </div>
           </div>
         )}
@@ -342,31 +308,40 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1600&h=900&fit=crop&auto=format" alt="" className="h-full w-full object-cover" />
         </div>
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${A.greenDark} 0%, ${A.greenDark}cc 40%, transparent 70%)` }} />
-          <div data-hero-children className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
-          <div className="max-w-2xl">
-
-            <h1 style={{ ...headingFont, lineHeight: '1.05' }} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
-              Smart Agriculture.
-            </h1>
-            <p className="mt-5 text-lg sm:text-xl leading-relaxed max-w-lg" style={{ color: 'rgba(255,255,255,0.75)' }}>
-              Digitizing Uganda's agricultural markets — from produce arrival to final sale — so everyone relies on real numbers, not guesswork.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <button type="button" onClick={() => { setAuthMode("register"); openPortal(); }}
-                className="inline-flex items-center justify-center h-13 px-8 text-sm font-semibold rounded-xl transition-all shadow-xl text-white"
-                style={{ background: A.green }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#55b832'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = A.green; }}>
-                View Today's Prices <ArrowRight size={16} className="ml-2" />
-              </button>
-              <a href="#services"
-                className="inline-flex items-center justify-center h-13 px-8 text-sm font-medium rounded-xl transition-colors text-white"
-                style={{ border: `2px solid rgba(255,255,255,0.3)` }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}>
-                Our Services
-              </a>
+        <div data-hero-children className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-36">
+          <div className="max-w-2xl flex items-start gap-8">
+            <div className="flex-1">
+              <h1 style={{ ...headingFont, lineHeight: '1.05' }} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white">
+                Smart Agriculture.
+              </h1>
+              <p className="mt-5 text-lg sm:text-xl leading-relaxed max-w-lg" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                Digitizing Uganda's agricultural markets — from produce arrival to final sale.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <button type="button" onClick={() => { setAuthMode("register"); openPortal(); }}
+                  className="inline-flex items-center justify-center h-13 px-8 text-sm font-semibold rounded-xl transition-all shadow-xl text-white"
+                  style={{ background: A.green }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#55b832'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = A.green; }}>
+                  View Today's Prices <ArrowRight size={16} className="ml-2" />
+                </button>
+                <a href="#services"
+                  className="inline-flex items-center justify-center h-13 px-8 text-sm font-medium rounded-xl transition-colors text-white"
+                  style={{ border: `2px solid rgba(255,255,255,0.3)` }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}>
+                  Our Services
+                </a>
+              </div>
             </div>
+            {/* ── 1. Sprouting Seedling ── */}
+            <svg ref={seedlingRef} viewBox="0 0 120 160" className="w-28 sm:w-36 shrink-0 mt-8 hidden sm:block" style={{ transformOrigin: "bottom center" }}>
+              <path d="M60 145 L60 80" stroke="#65CB3B" strokeWidth="4" strokeLinecap="round" fill="none" />
+              <path d="M60 80 Q35 65 25 40 Q22 30 30 25 Q38 20 45 30 Q55 45 60 50" fill="#65CB3B" opacity="0.9" />
+              <path d="M60 80 Q85 65 95 40 Q98 30 90 25 Q82 20 75 30 Q65 45 60 50" fill="#00652F" opacity="0.9" />
+              <circle cx="60" cy="148" r="8" fill="#B5CBC5" opacity="0.6" />
+              <circle cx="60" cy="148" r="4" fill="#00652F" />
+            </svg>
           </div>
         </div>
       </section>
@@ -382,18 +357,13 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           </div>
           <div>
             <SubHeading>What is AgriHub?</SubHeading>
-            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">
-              A digital governance platform
-            </h2>
+            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">A digital governance platform</h2>
             <div className="mt-4 w-16 h-1 rounded-full" style={{ background: A.green }} />
             <p className="mt-5 text-lg leading-relaxed" style={{ color: A.muted }}>
               Used by market officials to register farmers and produce, verify quality, log prices, and record transactions — with every step rolling up into analytics that support better decisions.
             </p>
             <ul className="mt-6 space-y-3">
-              {[
-                "Digital farmer registration with complete traceability",
-                "Real-time market prices and commodity tracking",
-              ].map((item, i) => (
+              {["Digital farmer registration with complete traceability", "Real-time market prices and commodity tracking"].map((item, i) => (
                 <li key={i} className="flex items-center gap-3 text-sm" style={{ color: A.muted }}>
                   <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: `${A.green}20` }}>
                     <CheckSquare size={12} style={{ color: A.green }} />
@@ -420,12 +390,9 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             <h2 style={{ ...headingFont, color: A.greenDark }} className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Services We're offering</h2>
             <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
           </div>
-
           <div data-animate="y:30" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {services.map(({ icon: Icon, title, desc }) => (
-              <div key={title}
-                className="group rounded-2xl p-6 transition-all duration-300"
-                style={{ background: A.bg, border: `1px solid ${A.border}40` }}
+              <div key={title} className="group rounded-2xl p-6 transition-all duration-300" style={{ background: A.bg, border: `1px solid ${A.border}40` }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = A.green; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.06)'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = `${A.border}40`; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-colors" style={{ background: `${A.green}20` }}>
@@ -448,8 +415,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               { src: "https://images.seeklogo.com/logo-png/54/1/uganda-bureau-of-statistics-ubos-logo-png_seeklogo-548891.png", alt: "UBOS" },
               { src: "https://createa.agriculture.go.ug/sites/default/files/MAAIF_LOGO-XXXX-re.png", alt: "MAAIF" },
             ].map((brand) => (
-              <img key={brand.alt} src={brand.src} alt={brand.alt}
-                className="h-16 sm:h-20 w-auto object-contain" />
+              <img key={brand.alt} src={brand.src} alt={brand.alt} className="h-16 sm:h-20 w-auto object-contain" />
             ))}
           </div>
         </div>
@@ -460,18 +426,14 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         <div className="grid gap-12 lg:grid-cols-2 items-center">
           <div>
             <SubHeading>Platform Overview</SubHeading>
-            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">
-              A unified system for agricultural market governance
-            </h2>
+            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">A unified system for agricultural market governance</h2>
             <div className="mt-4 w-16 h-1 rounded-full" style={{ background: A.green }} />
             <p className="mt-5 text-lg leading-relaxed" style={{ color: A.muted }}>
-              From farmer registration to market transactions, AgriHub connects every step of the agricultural value chain on a single digital platform — giving officials, traders, and farmers real-time visibility and control.
+              From farmer registration to market transactions, AgriHub connects every step of the agricultural value chain on a single digital platform.
             </p>
             <div className="mt-6 flex gap-4">
               {["Farmers", "Markets", "Government"].map((tag) => (
-                <span key={tag} className="px-4 py-1.5 rounded-full text-xs font-semibold" style={{ background: `${A.green}20`, color: A.greenDark, border: `1px solid ${A.green}50` }}>
-                  {tag}
-                </span>
+                <span key={tag} className="px-4 py-1.5 rounded-full text-xs font-semibold" style={{ background: `${A.green}20`, color: A.greenDark, border: `1px solid ${A.green}50` }}>{tag}</span>
               ))}
             </div>
           </div>
@@ -489,24 +451,67 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
+      {/* ─── 2. Parallax Farmscape ─── */}
+      <section id="parallax" className="relative h-[70vh] overflow-hidden" style={{ background: '#87CEEB' }}>
+        <div ref={skyRef} className="absolute inset-0" style={{
+          background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #FAF8EB 70%)',
+        }} />
+        <div ref={hillsRef} className="absolute inset-x-0 bottom-[20%] h-[40%]" style={{
+          background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2365CB3B' fill-opacity='0.4' d='M0,192L48,176C96,160,192,128,288,138.7C384,149,480,203,576,213.3C672,224,768,192,864,165.3C960,139,1056,117,1152,133.3C1248,149,1344,203,1392,229.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E")`,
+          backgroundSize: 'cover', backgroundPosition: 'bottom',
+        }} />
+        <div ref={fieldRef} className="absolute inset-x-0 bottom-0 h-[25%]" style={{
+          background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2300652F' fill-opacity='0.6' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,192C672,181,768,139,864,128C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E")`,
+          backgroundSize: 'cover', backgroundPosition: 'bottom',
+        }} />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: A.greenDark }}>Our Landscape</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-2" style={{ ...headingFont, color: A.greenDark }}>Uganda's Rich Farmlands</h2>
+            <p className="mt-2 max-w-md mx-auto text-sm" style={{ color: A.muted }}>From the green hills to the fertile fields — supporting thousands of farmers.</p>
+          </div>
+        </div>
+      </section>
+
       {/* ─── CTA Strip ─── */}
       <section className="relative overflow-hidden py-20" style={{ background: A.greenDark }}>
         <div className="absolute inset-0 opacity-20">
           <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1600&h=400&fit=crop&auto=format" alt="" className="h-full w-full object-cover" />
         </div>
         <div className="relative mx-auto max-w-4xl px-4 text-center">
-          <p style={{ color: A.green }} className="text-sm font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2">
-            <Leaf size={14} /> Data-Driven Agriculture
-          </p>
-          <h2 style={{ ...headingFont }} className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">
-            Digitizing Uganda's Agricultural Markets — From Farm to Market
-          </h2>
+          <p style={{ color: A.green }} className="text-sm font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2"><Leaf size={14} /> Data-Driven Agriculture</p>
+          <h2 style={{ ...headingFont }} className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">Digitizing Uganda's Agricultural Markets — From Farm to Market</h2>
           <a href="#contact" className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all text-white"
             style={{ background: A.green }}
             onMouseEnter={e => { e.currentTarget.style.background = '#55b832'; }}
             onMouseLeave={e => { e.currentTarget.style.background = A.green; }}>
             Join the Network <ArrowRight size={14} />
           </a>
+        </div>
+      </section>
+
+      {/* ─── 3. Horizontal Farm-to-Table Journey ─── */}
+      <section id="journey" className="relative overflow-hidden" style={{ background: A.bg }}>
+        <div ref={journeyWrap} className="relative h-[80vh]">
+          <div ref={journeyInner} className="flex h-full" style={{ width: `${journeySteps.length * 100}vw` }}>
+            {journeySteps.map((step, i) => (
+              <div key={step.title} className="flex items-center justify-center flex-shrink-0 px-12" style={{ width: '100vw' }}>
+                <div className="max-w-lg text-center">
+                  <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6" style={{ background: `${step.color}20`, border: `2px solid ${step.color}` }}>
+                    <step.icon size={40} style={{ color: step.color }} />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: A.green }}>Step {i + 1}</p>
+                  <h3 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold mt-2">{step.title}</h3>
+                  <p className="mt-4 text-lg" style={{ color: A.muted }}>{step.desc}</p>
+                  {i < journeySteps.length - 1 && (
+                    <div className="mt-10 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider" style={{ color: A.green }}>
+                      <ArrowRight size={16} /> Next Stage
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -525,9 +530,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <Quote size={24} style={{ color: A.green }} className="mb-4" />
               <p className="text-sm leading-relaxed italic" style={{ color: A.muted }}>"{quote}"</p>
               <div className="mt-6 flex items-center gap-3 pt-4" style={{ borderTop: `1px solid ${A.border}40` }}>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: A.greenDark }}>
-                  {initial}
-                </div>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: A.greenDark }}>{initial}</div>
                 <div>
                   <p style={{ color: A.greenDark }} className="text-sm font-semibold">{name}</p>
                   <p className="text-xs" style={{ color: A.muted }}>{role}</p>
@@ -538,22 +541,72 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ─── Counters ─── */}
+      {/* ─── 4. Weather & Seasons ─── */}
+      <section className="py-16 sm:py-24" style={{ background: A.card, borderTop: `1px solid ${A.border}40`, borderBottom: `1px solid ${A.border}40` }}>
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
+          <SubHeading>Seasons & Climate</SubHeading>
+          <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Weather Through the Year</h2>
+          <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
+          <p className="mt-5 text-lg" style={{ color: A.muted }}>Drag the slider to see how the seasons change across Uganda's farmlands.</p>
+
+          <div className="mt-10 max-w-lg mx-auto">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <Sun size={24} style={{ color: season < 30 ? A.amber : A.muted }} />
+              <input type="range" min="0" max="100" value={season} onChange={e => setSeason(Number(e.target.value))}
+                className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                style={{ background: `linear-gradient(to right, ${A.amber}, ${A.green}, ${A.greenDark})`, accentColor: A.greenDark }} />
+              <Snowflake size={24} style={{ color: season > 70 ? '#87CEEB' : A.muted }} />
+            </div>
+            <p className="text-sm font-semibold" style={{ color: A.greenDark }}>
+              {season < 30 ? "Dry Season — sunny & warm" : season < 60 ? "Growing Season — lush & green" : "Harvest Season — cool & dry"}
+            </p>
+          </div>
+
+          {/* Season scene visual */}
+          <div className="mt-10 h-56 rounded-2xl overflow-hidden relative" style={{
+            border: `1px solid ${A.border}`,
+            filter: `
+              hue-rotate(${(season - 50) * 0.5}deg)
+              saturate(${100 - Math.abs(season - 50) * 0.4}%)
+              brightness(${100 + (season - 50) * 0.2}%)
+            `,
+          }}>
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&h=400&fit=crop&auto=format" alt="Seasonal landscape"
+              className="w-full h-full object-cover transition-all duration-500" />
+            <div className="absolute inset-0" style={{
+              background: season < 50
+                ? `linear-gradient(180deg, transparent 0%, rgba(255,200,50,${(50 - season) * 0.006}) 100%)`
+                : `linear-gradient(180deg, transparent 0%, rgba(200,220,255,${(season - 50) * 0.006}) 100%)`,
+            }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. Animated Yield Charts ─── */}
       <section className="py-16" style={{ background: A.greenDark }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div data-animate="scale:0.8,opacity:0" className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { label: "Agriculture Products", value: "2,847" },
-              { label: "Projects completed", value: "1,234" },
-              { label: "Satisfied customers", value: "12,000+" },
-              { label: "Expert farmers", value: "850+" },
-            ].map(({ label, value }) => (
-              <div key={label} className="text-center p-6 rounded-2xl" style={{ background: 'rgba(255,255,255,0.08)', border: `1px solid rgba(255,255,255,0.12)` }}>
-                <p className="text-3xl sm:text-4xl font-bold" style={{ color: A.green }}>{value}</p>
-                <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{label}</p>
+          <div className="text-center mb-12">
+            <p style={{ color: A.green }} className="text-sm font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2"><BarChart2 size={14} /> Crop Yields</p>
+            <h2 style={{ ...headingFont }} className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-white">Seasonal Yield Data</h2>
+          </div>
+          <div data-animate="scale:0.9,opacity:0" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {yieldData.map(({ label, value, color }) => (
+              <div key={label} className="flex flex-col items-center">
+                <div className="relative w-full h-48 rounded-xl flex items-end justify-center pb-2" style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.1)` }}>
+                  <div className="w-3/5 rounded-lg transition-all duration-700" style={{
+                    height: `${value}%`,
+                    background: `linear-gradient(180deg, ${color}, ${color}88)`,
+                    boxShadow: `0 0 20px ${color}40`,
+                  }} />
+                </div>
+                <p className="mt-3 text-sm font-semibold text-white">{label}</p>
+                <p className="text-xs" style={{ color: A.green }}>{value}%</p>
               </div>
             ))}
           </div>
+          <p className="mt-8 text-center text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Based on data reported by registered farmers across Uganda this season.
+          </p>
         </div>
       </section>
 
@@ -564,7 +617,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Today's Commodity Prices</h2>
           <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
         </div>
-
         <div data-animate="y:30" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {markets.map((market, i) => (
             <article key={market.name} onClick={() => viewMarketPrices(market)}
@@ -581,9 +633,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               </div>
               <div className="p-4">
                 <h3 style={{ color: A.greenDark }} className="text-base font-bold">{market.name}</h3>
-                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: A.muted }}>
-                  <MapPin size={10} /> {market.location}
-                </p>
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: A.muted }}><MapPin size={10} /> {market.location}</p>
                 <div className="mt-3 flex items-center justify-between pt-3" style={{ borderTop: `1px solid ${A.border}40` }}>
                   <div className="flex gap-3 text-xs" style={{ color: A.muted }}>
                     <span>{market.traders}</span>
@@ -622,8 +672,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-
-
       {/* ─── Contact CTA ─── */}
       <section id="contact" className="py-16 sm:py-20" style={{ background: A.card, borderTop: `1px solid ${A.border}40` }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -632,10 +680,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <SubHeading>Contact Now</SubHeading>
               <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Get in touch now</h2>
               <div className="mt-4 w-16 h-1 rounded-full" style={{ background: A.green }} />
-              <p className="mt-5 leading-relaxed" style={{ color: A.muted }}>
-                Lorem ipsum dolor sit amet, adipiscing elit. In hac habitasse platea dictumst.
-                Duis porta, quam ut finibus ultrices.
-              </p>
+              <p className="mt-5 leading-relaxed" style={{ color: A.muted }}>Ready to bring your market into the digital age? Reach out to our team.</p>
               <div className="mt-8 space-y-4">
                 {[
                   { icon: Phone, label: "Have Question?", value: "+256 700 123 456" },
@@ -687,9 +732,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                 </div>
                 <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-xl font-bold text-white">AgriHub</span>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                Welcome to our Agriculture & Market platform. Lorem simply text amet cing elit.
-              </p>
+              <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>Welcome to our Agriculture & Market platform. Connecting Uganda's agricultural value chain.</p>
               <div className="flex items-center gap-3 mt-5">
                 {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
                   <a key={i} href="#" className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
@@ -701,7 +744,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                 ))}
               </div>
             </div>
-
             <div>
               <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-sm font-bold text-white mb-4">Explore</h3>
               <ul className="space-y-2.5 text-sm">
@@ -716,26 +758,16 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                 ))}
               </ul>
             </div>
-
-
-
             <div>
               <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-sm font-bold text-white mb-4">Contact</h3>
               <ul className="space-y-3 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                <li className="flex items-center gap-2">
-                  <Phone size={12} style={{ color: A.green }} /> +256 788 654 321
-                </li>
-                <li className="flex items-center gap-2">
-                  <Mail size={12} style={{ color: A.green }} /> admin@agrihub.com
-                </li>
-                <li className="flex items-center gap-2">
-                  <MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda
-                </li>
+                <li className="flex items-center gap-2"><Phone size={12} style={{ color: A.green }} /> +256 788 654 321</li>
+                <li className="flex items-center gap-2"><Mail size={12} style={{ color: A.green }} /> admin@agrihub.com</li>
+                <li className="flex items-center gap-2"><MapPin size={12} style={{ color: A.green }} /> Kampala, Uganda</li>
               </ul>
             </div>
           </div>
         </div>
-
         <div style={{ borderTop: `1px solid rgba(255,255,255,0.12)` }}>
           <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>&copy; {new Date().getFullYear()} AgriHub. All Rights Reserved.</p>
@@ -756,8 +788,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
               <X size={16} />
             </button>
             <div className="grid md:grid-cols-[0.95fr_1.05fr]">
-              <div className="relative hidden min-h-[520px] p-10 md:flex md:flex-col md:justify-between"
-                style={{ background: A.greenDark }}>
+              <div className="relative hidden min-h-[520px] p-10 md:flex md:flex-col md:justify-between" style={{ background: A.greenDark }}>
                 <div className="relative flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: `${A.green}30` }}>
                     <Leaf size={18} className="text-white" />
@@ -774,20 +805,15 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                   <p className="text-sm leading-6" style={{ color: 'rgba(255,255,255,0.7)' }}>Digital agricultural governance for market officers, farmers, and government teams.</p>
                 </div>
               </div>
-
               <div className="p-6 sm:p-8 md:p-10">
                 <div className="mb-6">
                   <div className="flex items-center gap-4 mb-4">
                     <button onClick={() => { setAuthMode("login"); setLoginError(""); }}
                       className={`text-sm font-medium transition-colors pb-1 ${authMode === "login" ? "border-b-2" : ""}`}
-                      style={authMode === "login" ? { color: A.greenDark, borderColor: A.greenDark } : { color: A.muted }}>
-                      Sign in
-                    </button>
+                      style={authMode === "login" ? { color: A.greenDark, borderColor: A.greenDark } : { color: A.muted }}>Sign in</button>
                     <button onClick={() => { setAuthMode("register"); setLoginError(""); }}
                       className={`text-sm font-medium transition-colors pb-1 ${authMode === "register" ? "border-b-2" : ""}`}
-                      style={authMode === "register" ? { color: A.greenDark, borderColor: A.greenDark } : { color: A.muted }}>
-                      Create account
-                    </button>
+                      style={authMode === "register" ? { color: A.greenDark, borderColor: A.greenDark } : { color: A.muted }}>Create account</button>
                   </div>
                   <h2 style={{ ...headingFont, color: A.greenDark }} className="text-2xl font-semibold tracking-tight">
                     {authMode === "login" ? "Welcome back" : "Join AgriHub"}
@@ -796,7 +822,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                     {authMode === "login" ? "Authorized access only for market administrators and officers." : "Register as a farmer to track your produce and access market prices."}
                   </p>
                 </div>
-
                 <form onSubmit={authMode === "login" ? handleSubmit : handleRegister} className="space-y-4">
                   {authMode === "register" && (
                     <div>
@@ -881,9 +906,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                   </p>
                 </div>
                 <details className="group mt-4 rounded-xl p-4" style={{ background: A.bg, border: `1px solid ${A.border}` }}>
-                  <summary className="cursor-pointer select-none text-xs font-medium transition-colors" style={{ color: A.muted }}>
-                    Test Accounts
-                  </summary>
+                  <summary className="cursor-pointer select-none text-xs font-medium transition-colors" style={{ color: A.muted }}>Test Accounts</summary>
                   <div className="mt-3 space-y-2 text-xs" style={{ color: A.muted }}>
                     <p className="flex justify-between gap-4"><span>Administrator</span><span className="font-mono">admin@agrihub.com / admin123</span></p>
                     <p className="flex justify-between gap-4"><span>Market Officer</span><span className="font-mono">officer@agrihub.com / officer123</span></p>
