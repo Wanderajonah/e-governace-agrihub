@@ -49,8 +49,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [season, setSeason] = useState(50);
 
   const seedlingRef = useRef<SVGSVGElement>(null);
-  const journeyWrap = useRef<HTMLDivElement>(null);
-  const journeyInner = useRef<HTMLDivElement>(null);
 
   /* ── initial hero fade ── */
   useEffect(() => {
@@ -76,7 +74,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     return () => obs.disconnect();
   }, []);
 
-  /* ── ScrollTrigger animations (seedling, parallax, journey) ── */
+  /* ── ScrollTrigger animations (seedling) ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
 
@@ -89,21 +87,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
             scrollTrigger: { trigger: seedlingRef.current, start: "top 85%", toggleActions: "play none none none" },
           }
         );
-      }
-
-      /* 3. Horizontal Farm-to-Table Journey */
-      if (journeyWrap.current && journeyInner.current) {
-        const inner = journeyInner.current;
-        const wrap = journeyWrap.current;
-        gsap.to(inner, {
-          x: () => -(inner.scrollWidth - wrap.offsetWidth),
-          ease: "none",
-          scrollTrigger: {
-            trigger: wrap, pin: true, scrub: 1,
-            start: "top top", end: () => "+=" + (inner.scrollWidth - wrap.offsetWidth),
-            invalidateOnRefresh: true,
-          },
-        });
       }
     });
     return () => ctx.revert();
@@ -458,25 +441,26 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* ─── 3. Horizontal Farm-to-Table Journey ─── */}
-      <section id="journey" className="relative overflow-hidden" style={{ background: A.bg }}>
-        <div ref={journeyWrap} className="relative h-[80vh]">
-          <div ref={journeyInner} className="flex h-full" style={{ width: `${journeySteps.length * 100}vw` }}>
+      {/* ─── 3. Farm-to-Table Journey ─── */}
+      <section id="journey" className="py-16 sm:py-24" style={{ background: A.card, borderTop: `1px solid ${A.border}40`, borderBottom: `1px solid ${A.border}40` }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <SubHeading>How It Travels</SubHeading>
+            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Farm-to-Table Journey</h2>
+            <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
+          </div>
+          <div data-animate="y:30" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {journeySteps.map((step, i) => (
-              <div key={step.title} className="flex items-center justify-center flex-shrink-0 px-12" style={{ width: '100vw' }}>
-                <div className="max-w-lg text-center">
-                  <div className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6" style={{ background: `${step.color}20`, border: `2px solid ${step.color}` }}>
-                    <step.icon size={40} style={{ color: step.color }} />
-                  </div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: A.green }}>Step {i + 1}</p>
-                  <h3 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold mt-2">{step.title}</h3>
-                  <p className="mt-4 text-lg" style={{ color: A.muted }}>{step.desc}</p>
-                  {i < journeySteps.length - 1 && (
-                    <div className="mt-10 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider" style={{ color: A.green }}>
-                      <ArrowRight size={16} /> Next Stage
-                    </div>
-                  )}
+              <div key={step.title} className="rounded-2xl p-6 text-center transition-all duration-300" style={{ background: A.bg, border: `1px solid ${A.border}40` }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = step.color; e.currentTarget.style.transform = 'translateY(-4px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = `${A.border}40`; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: `${step.color}20` }}>
+                  <step.icon size={28} style={{ color: step.color }} />
                 </div>
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: A.green }}>Step {i + 1}</p>
+                <h3 style={{ ...headingFont, color: A.greenDark }} className="text-lg font-bold mt-1">{step.title}</h3>
+                <p className="text-sm mt-2" style={{ color: A.muted }}>{step.desc}</p>
+                {i < journeySteps.length - 1 && <ArrowRight size={14} className="mx-auto mt-4" style={{ color: A.green }} />}
               </div>
             ))}
           </div>
