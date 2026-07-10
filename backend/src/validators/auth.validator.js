@@ -14,6 +14,11 @@ export const registerRules = [
   body('phone')
     .notEmpty()
     .withMessage('Phone number is required'),
+  body('district')
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage('District is required'),
 ];
 
 export const loginRules = [

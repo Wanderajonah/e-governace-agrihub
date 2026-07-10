@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Farmer from '../models/Farmer.js';
 import config from '../config/index.js';
 
 const signToken = (id, role) => {
@@ -8,7 +9,7 @@ const signToken = (id, role) => {
   });
 };
 
-export const register = async ({ name, email, password, phone }) => {
+export const register = async ({ name, email, password, phone, district }) => {
   const existing = await User.findOne({ email });
   if (existing) {
     const error = new Error('Email already registered');
@@ -23,6 +24,14 @@ export const register = async ({ name, email, password, phone }) => {
     phone,
     role: 'Farmer',
     agency: 'Farmer',
+    status: 'Active',
+  });
+
+  await Farmer.create({
+    name,
+    phone,
+    district: district || 'Kampala',
+    produce: '',
     status: 'Active',
   });
 

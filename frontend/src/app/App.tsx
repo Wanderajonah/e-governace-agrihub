@@ -641,6 +641,7 @@ function LoginScreen({
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [regName, setRegName] = useState("");
   const [regPhone, setRegPhone] = useState("");
+  const [regDistrict, setRegDistrict] = useState("Kampala");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [visible, setVisible] = useState<Set<string>>(new Set());
   const [counts, setCounts] = useState({
@@ -710,7 +711,7 @@ function LoginScreen({
     setLoggingIn(true);
     setLoginError("");
     try {
-      const res = await api.register({ name: regName, email, password, phone: regPhone });
+      const res = await api.register({ name: regName, email, password, phone: regPhone, district: regDistrict });
       const { token, user } = res.data.data;
       onLogin(token, user);
     } catch (err: any) {
@@ -1327,6 +1328,22 @@ function LoginScreen({
                       />
                     </div>
                   </div>
+                  {authMode === "register" && (
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                        District
+                      </label>
+                      <select
+                        value={regDistrict}
+                        onChange={(e) => setRegDistrict(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-3.5 text-sm text-gray-900 outline-none transition focus:border-[#0f6a34] focus:ring-1 focus:ring-[#0f6a34]/20"
+                      >
+                        {["Kampala", "Wakiso", "Mukono", "Lira", "Gulu", "Mbarara", "Jinja", "Soroti", "Mbale"].map(d => (
+                          <option key={d} value={d}>{d}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   {authMode === "register" && (
                     <div>
                       <label className="mb-1.5 block text-sm font-medium text-gray-700">

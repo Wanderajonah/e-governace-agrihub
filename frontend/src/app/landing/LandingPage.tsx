@@ -57,6 +57,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [regName, setRegName] = useState("");
   const [regPhone, setRegPhone] = useState("");
+  const [regDistrict, setRegDistrict] = useState("Kampala");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [selectedMarket, setSelectedMarket] = useState<any>(null);
@@ -85,7 +86,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
     setLoggingIn(true);
     setLoginError("");
     try {
-      const res = await api.register({ name: regName, email, password, phone: regPhone });
+      const res = await api.register({ name: regName, email, password, phone: regPhone, district: regDistrict });
       const { token, user } = res.data.data;
       onLogin(token, user);
     } catch (err: any) {
@@ -806,6 +807,20 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                         onBlur={e => { e.currentTarget.style.borderColor = A.border; }} required minLength={6} />
                     </div>
                   </div>
+                  {authMode === "register" && (
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium" style={{ color: A.greenDark }}>District</label>
+                      <select value={regDistrict} onChange={(e) => setRegDistrict(e.target.value)}
+                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition"
+                        style={{ background: A.bg, border: `1px solid ${A.border}`, color: A.text }}
+                        onFocus={e => { e.currentTarget.style.borderColor = A.green; }}
+                        onBlur={e => { e.currentTarget.style.borderColor = A.border; }}>
+                        {["Kampala", "Wakiso", "Mukono", "Lira", "Gulu", "Mbarara", "Jinja", "Soroti", "Mbale"].map(d => (
+                          <option key={d} value={d}>{d}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   {authMode === "register" && (
                     <div>
                       <label className="mb-1.5 block text-sm font-medium" style={{ color: A.greenDark }}>Phone Number</label>
