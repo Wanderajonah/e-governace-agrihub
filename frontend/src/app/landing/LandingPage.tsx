@@ -78,7 +78,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           const children = el.querySelectorAll(":scope > *");
           const anim = el.getAttribute("data-animate") || "y:30,opacity:0";
           const parts = Object.fromEntries(anim.split(",").map(s => { const [k, v] = s.split(":"); return [k, parseFloat(v) || v]; }));
-          gsap.to(children, { ...parts, y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out", overwrite: true });
+          gsap.from(children, { ...parts, duration: 0.6, stagger: 0.1, ease: "power2.out", overwrite: true });
           obs.unobserve(el);
         }
       });
