@@ -147,7 +147,7 @@ function Badge({ label, color }: { label: string; color: string }) {
   const cls = map[label] ?? "bg-gray-100 text-gray-600";
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none ${cls}`}
+      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium leading-none ${cls}`}
     >
       {label}
     </span>
@@ -182,7 +182,7 @@ function StatCard({
         <Icon size={22} style={{ color }} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">
           {label}
         </p>
         <p className="text-2xl font-bold text-gray-900 leading-none mb-1">
@@ -225,7 +225,7 @@ function Card({
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       {title && (
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+          <h3 className="text-base font-bold text-gray-800">{title}</h3>
           {action}
         </div>
       )}
@@ -246,10 +246,10 @@ function PageHeader({
   return (
     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6 lg:mb-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-lg font-bold text-gray-900 tracking-tight">
           {title}
         </h1>
-        {subtitle && <p className="text-sm text-gray-400 mt-1">{subtitle}</p>}
+        {subtitle && <p className="text-[13px] text-gray-400 mt-1">{subtitle}</p>}
       </div>
       {children && <div className="flex items-center gap-2 sm:gap-3 flex-wrap">{children}</div>}
     </div>
@@ -363,7 +363,7 @@ function Td({
 }) {
   return (
     <td
-      className={`py-3.5 px-6 text-sm text-gray-700 align-middle ${className}`}
+      className={`py-3.5 px-6 text-[13px] text-gray-700 align-middle ${className}`}
     >
       {children}
     </td>
@@ -414,7 +414,7 @@ function Input({
   return (
     <div>
       {label && (
-        <label className="block text-sm font-semibold text-gray-600 mb-1">
+        <label className="block text-xs font-medium text-gray-600 mb-1">
           {label}
           {required && <span className="text-red-500 ml-0.5">*</span>}
         </label>
