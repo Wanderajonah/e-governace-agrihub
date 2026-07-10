@@ -2354,7 +2354,7 @@ function FarmersScreen() {
                   <td className="py-3 px-5 text-gray-700 align-middle">
                     <button
                       onClick={() => selectFarmer(f)}
-                      className="font-medium text-gray-800 hover:text-green-700 transition-colors"
+                      className="text-left text-gray-700 hover:text-green-700 transition-colors"
                     >
                       {f.name}
                     </button>
