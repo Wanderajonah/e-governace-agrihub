@@ -9,5 +9,5 @@
   setTimeout(() => {
     const el = document.getElementById("splash");
     if (el) el.classList.add("hidden");
-  }, 10000);
+  }, 5000);
   

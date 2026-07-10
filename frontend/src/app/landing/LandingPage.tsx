@@ -475,17 +475,16 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       </section>
 
       {/* ─── 3. Farm-to-Table Journey ─── */}
-      <section id="journey" className="relative overflow-hidden" style={{ background: A.bg }}>
-        <div ref={journeyWrap} className="relative h-[70vh]">
-          <div className="absolute inset-0 flex items-center pointer-events-none z-10">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 w-full">
-              <div className="text-center max-w-2xl mx-auto mb-6">
-                <SubHeading>How It Travels</SubHeading>
-                <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Farm-to-Table Journey</h2>
-              </div>
-            </div>
+      <section id="journey" style={{ background: A.bg }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-4">
+          <div className="text-center max-w-2xl mx-auto">
+            <SubHeading>How It Travels</SubHeading>
+            <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">Farm-to-Table Journey</h2>
+            <div className="mx-auto mt-3 w-16 h-1 rounded-full" style={{ background: A.green }} />
           </div>
-          <div className="absolute top-[30%] inset-x-0">
+        </div>
+        <div ref={journeyWrap} className="relative h-[55vh]">
+          <div className="absolute top-6 inset-x-0">
             <div ref={journeyInner} className="flex gap-6 px-[calc((100vw-72rem)/2+1.5rem)]" style={{ width: `${journeySteps.length * 380 + (journeySteps.length - 1) * 24 + 48}px` }}>
               {journeySteps.map((step, i) => (
                 <div key={step.title} className="flex-shrink-0 w-[340px] rounded-2xl p-8 transition-all" style={{ background: A.card, border: `1px solid ${A.border}40` }}
@@ -643,10 +642,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
           ))}
         </div>
       </section>
-
-      <div style={{ position: 'fixed', bottom: 0, right: 0, background: '#fff', border: '1px solid red', padding: 8, fontSize: 12, zIndex: 99998 }}>
-        market: {selectedMarket?.name || "none"} | loading: {String(loadingPrices)} | count: {marketPrices.length}
-      </div>
 
       {/* ─── FAQ ─── */}
       <section className="py-16 sm:py-24" style={{ background: A.card, borderTop: `1px solid ${A.border}40`, borderBottom: `1px solid ${A.border}40` }}>
