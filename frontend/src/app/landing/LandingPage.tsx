@@ -492,16 +492,16 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
         </div>
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <p style={{ color: A.green }} className="text-sm font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2">
-            <Leaf size={14} /> We're Selling Healthy Products
+            <Leaf size={14} /> Data-Driven Agriculture
           </p>
           <h2 style={{ ...headingFont }} className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">
-            Unbeatable Digital and Agriculture Services
+            Digitizing Uganda's Agricultural Markets — From Farm to Market
           </h2>
           <a href="#contact" className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all text-white"
             style={{ background: A.green }}
             onMouseEnter={e => { e.currentTarget.style.background = '#55b832'; }}
             onMouseLeave={e => { e.currentTarget.style.background = A.green; }}>
-            Discover More <ArrowRight size={14} />
+            Join the Network <ArrowRight size={14} />
           </a>
         </div>
       </section>
