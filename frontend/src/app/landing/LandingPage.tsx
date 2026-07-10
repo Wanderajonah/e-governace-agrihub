@@ -454,17 +454,16 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <div className="grid gap-12 lg:grid-cols-2 items-center">
           <div>
-            <SubHeading>Pure Organic System</SubHeading>
+            <SubHeading>Platform Overview</SubHeading>
             <h2 style={{ ...headingFont, color: A.greenDark }} className="text-3xl sm:text-4xl font-bold tracking-tight">
-              Healthy system for your good governance
+              A unified system for agricultural market governance
             </h2>
             <div className="mt-4 w-16 h-1 rounded-full" style={{ background: A.green }} />
             <p className="mt-5 text-lg leading-relaxed" style={{ color: A.muted }}>
-              Lorem ipsum dolor sit amet nsectetur cing elit. Suspe ndisse suscipit sagittis leo
-              sit met entum estibu dignissim posuere cubilia durae.
+              From farmer registration to market transactions, AgriHub connects every step of the agricultural value chain on a single digital platform — giving officials, traders, and farmers real-time visibility and control.
             </p>
             <div className="mt-6 flex gap-4">
-              {["Harvesting", "Growth", "Maintenance"].map((tag) => (
+              {["Farmers", "Markets", "Government"].map((tag) => (
                 <span key={tag} className="px-4 py-1.5 rounded-full text-xs font-semibold" style={{ background: `${A.green}20`, color: A.greenDark, border: `1px solid ${A.green}50` }}>
                   {tag}
                 </span>
