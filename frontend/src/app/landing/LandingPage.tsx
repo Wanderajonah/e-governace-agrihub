@@ -397,7 +397,7 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
       </section>
 
       {/* ─── Brand Strip ─── */}
-      <div className="py-10">
+      <div className="py-10" style={{ background: '#FFFFFF' }}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex items-center justify-center gap-12 sm:gap-20 flex-wrap">
             {[
@@ -957,11 +957,6 @@ export default function LandingPage({ onLogin }: LandingPageProps) {
                     {loggingIn ? "Please wait..." : authMode === "login" ? "Sign in" : "Create account"}
                   </button>
                 </form>
-                <div className="mt-4 rounded-xl p-3" style={{ background: A.bg, border: `1px solid ${A.border}` }}>
-                  <p className="flex items-center gap-1.5 text-xs font-medium" style={{ color: A.muted }}>
-                    <Lock size={12} style={{ color: A.greenDark }} /> Secure portal — authorized access only
-                  </p>
-                </div>
                 <details className="group mt-4 rounded-xl p-4" style={{ background: A.bg, border: `1px solid ${A.border}` }}>
                   <summary className="cursor-pointer select-none text-xs font-medium transition-colors" style={{ color: A.muted }}>Test Accounts</summary>
                   <div className="mt-3 space-y-2 text-xs" style={{ color: A.muted }}>

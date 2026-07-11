@@ -86,11 +86,13 @@ http://localhost:5000/api-docs
 
 ## Default Login Credentials
 
-| Role              | Name              | Email                        | Password      | Agency |
-| ----------------- | ----------------- | ---------------------------- | ------------- | ------ |
-| Administrator     | Wandera Jonah     | admin@agrihub.com            | admin123      | KCCA   |
-| Market Officer    | Sarah Tendo       | officer@agrihub.com          | officer123    | KCCA   |
-| Government Officer| David Okello      | gov@agrihub.com              | gov123        | MAAIF  |
+| Role               | Name              | Email                        | Password        | Agency |
+| ------------------ | ----------------- | ---------------------------- | --------------- | ------ |
+| Administrator      | Wandera Jonah     | admin@agrihub.com            | admin123        | KCCA   |
+| Market Officer     | Sarah Tendo       | officer@agrihub.com          | officer123      | KCCA   |
+| Government Officer | David Okello      | gov@agrihub.com              | gov123          | MAAIF  |
+| Produce Inspector  | Grace Akinyi      | inspector@agrihub.com        | inspector123    | KCCA   |
+| Farmer             | John Ssekandi     | farmer@agrihub.com           | farmer123       | Farmer |
 
 ## Project Structure
 

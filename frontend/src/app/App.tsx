@@ -1392,11 +1392,6 @@ function LoginScreen({
                     {loggingIn ? "Please wait..." : authMode === "login" ? "Sign in" : "Create account"}
                   </button>
                 </form>
-                <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
-                  <p className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
-                    <Shield size={12} /> Secure portal — authorized access only
-                  </p>
-                </div>
                 <details className="group mt-4 rounded-lg border border-gray-200 bg-white p-4">
                   <summary className="cursor-pointer select-none text-xs font-medium text-gray-500 transition hover:text-gray-700">
                     Test Accounts
