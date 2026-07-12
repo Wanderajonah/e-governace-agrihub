@@ -135,6 +135,15 @@
 
   html {
     font-size: var(--font-size);
+    font-family: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: 'Geist', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'Geist Mono', 'JetBrains Mono', monospace;
   }
 
   h1 {
