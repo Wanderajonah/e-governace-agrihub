@@ -208,7 +208,7 @@ function FarmersScreen() {
             <div className="mt-6 pt-5 border-t border-gray-100 space-y-3">
               {[
                 { icon: MapPin, label: "District", value: selectedFarmer.district },
-                { icon: Phone, label: "Phone", value: selectedFarmer.phone },
+                { icon: Phone, label: "Phone", value: selectedFarmer.phone?.replace(/^\+256\s*/, "") },
                 { icon: Leaf, label: "Produce", value: selectedFarmer.produce },
                 { icon: Calendar, label: "Registered", value: selectedFarmer.registered },
               ].map(({ icon: Icon, label, value }) => (
@@ -380,7 +380,7 @@ function FarmersScreen() {
                       <span className="font-mono text-xs text-gray-400">{f.id}</span>
                     </td>
                     <td className="py-3 px-4 text-sm text-gray-600 align-middle">{f.district}</td>
-                    <td className="py-3 px-4 text-sm text-gray-500 align-middle font-mono">{f.phone}</td>
+                    <td className="py-3 px-4 text-sm text-gray-500 align-middle font-mono">{f.phone?.replace(/^\+256\s*/, "")}</td>
                     <td className="py-3 px-4 text-sm text-gray-600 align-middle">{f.produce || "—"}</td>
                     <td className="py-3 px-4 align-middle">
                       <StatusBadge label={f.status} />
