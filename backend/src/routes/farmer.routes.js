@@ -1,13 +1,7 @@
-import { Router } from 'express';
-import {
-  createFarmer,
-  listFarmers,
-  getFarmer,
-  updateFarmer,
-  deleteFarmer,
-} from '../controllers/farmer.controller.js';
-import { createFarmerRules } from '../validators/farmer.validator.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { createFarmer, listFarmers, getFarmer, updateFarmer, deleteFarmer } = require('../controllers/farmer.controller');
+const { createFarmerRules } = require('../validators/farmer.validator');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -17,4 +11,4 @@ router.get('/:id', protect, getFarmer);
 router.put('/:id', protect, authorize('Administrator', 'Market Officer'), updateFarmer);
 router.delete('/:id', protect, authorize('Administrator'), deleteFarmer);
 
-export default router;
+module.exports = router;

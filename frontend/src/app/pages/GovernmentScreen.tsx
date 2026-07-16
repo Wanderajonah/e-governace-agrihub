@@ -9,6 +9,7 @@ import {
   CheckCircle,
   AlertCircle,
   Star,
+  Download,
 } from "lucide-react";
 import {
   BarChart,
@@ -65,13 +66,19 @@ function GovernmentScreen() {
             COLORS.success,
             COLORS.secondary,
           ];
-          setProduceVol(
-            data.data.map((v: any, i: number) => ({
-              name: v.commodity,
-              value: v.totalQuantity,
-              fill: fills[i % fills.length],
-            })),
-          );
+          const maxSlices = 7;
+          const top = data.data.slice(0, maxSlices);
+          const rest = data.data.slice(maxSlices);
+          const othersTotal = rest.reduce((s: number, v: any) => s + v.totalQuantity, 0);
+          const consolidated = top.map((v: any, i: number) => ({
+            name: v.commodity,
+            value: v.totalQuantity,
+            fill: fills[i % fills.length],
+          }));
+          if (rest.length > 0) {
+            consolidated.push({ name: "Others", value: othersTotal, fill: "#CBD5E1" });
+          }
+          setProduceVol(consolidated);
         }
       })
       .catch(() => {});

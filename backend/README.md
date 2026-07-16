@@ -146,18 +146,6 @@ backend/
 │   │   └── user.routes.js
 │   ├── seed/
 │   │   └── seed.js            # Database seeder
-│   ├── services/
-│   │   ├── auth.service.js
-│   │   ├── farmer.service.js
-│   │   ├── produce.service.js
-│   │   ├── price.service.js
-│   │   ├── verification.service.js
-│   │   ├── transaction.service.js
-│   │   ├── dashboard.service.js
-│   │   ├── analytics.service.js
-│   │   ├── report.service.js
-│   │   ├── notification.service.js
-│   │   └── user.service.js
 │   ├── utils/
 │   │   ├── apiResponse.js     # Standard response helpers
 │   │   └── helpers.js         # Utility functions

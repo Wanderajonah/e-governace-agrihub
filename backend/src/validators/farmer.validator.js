@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createFarmerRules = [
+const createFarmerRules = [
   body('name')
     .notEmpty()
     .withMessage('Name is required')
@@ -21,7 +21,7 @@ export const createFarmerRules = [
     .withMessage('Status must be Active, Inactive, or Pending'),
 ];
 
-export const updateFarmerRules = [
+const updateFarmerRules = [
   body('name')
     .optional()
     .isString()
@@ -37,3 +37,5 @@ export const updateFarmerRules = [
     .isIn(['Active', 'Inactive', 'Pending'])
     .withMessage('Status must be Active, Inactive, or Pending'),
 ];
+
+module.exports = { createFarmerRules, updateFarmerRules };

@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createProduceRules = [
+const createProduceRules = [
   body('farmer')
     .notEmpty()
     .withMessage('Farmer is required')
@@ -31,7 +31,7 @@ export const createProduceRules = [
     .withMessage('Arrival date must be a valid date'),
 ];
 
-export const updateProduceRules = [
+const updateProduceRules = [
   body('farmer')
     .optional()
     .isMongoId()
@@ -55,3 +55,5 @@ export const updateProduceRules = [
     .isDate()
     .withMessage('Arrival date must be a valid date'),
 ];
+
+module.exports = { createProduceRules, updateProduceRules };

@@ -1,47 +1,91 @@
-import { successResponse, errorResponse, paginatedResponse } from '../utils/apiResponse.js';
-import farmerService from '../services/farmer.service.js';
+const asyncHandler = require('express-async-handler');
+const Farmer = require('../models/Farmer');
+const { calculatePagination } = require('../utils/helpers');
+const { successResponse, paginatedResponse } = require('../utils/apiResponse');
 
-export const createFarmer = async (req, res, next) => {
-  try {
-    const farmer = await farmerService.createFarmer(req.body);
-    return successResponse(res, farmer, 'Farmer created successfully', 201);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const createFarmer = asyncHandler(async (req, res) => {
+  const farmerId = await Farmer.generateFarmerId();
+  const farmer = await Farmer.create({ ...req.body, farmerId });
+  return successResponse(res, farmer, 'Farmer created successfully', 201);
+});
 
-export const getFarmer = async (req, res, next) => {
-  try {
-    const farmer = await farmerService.getFarmer(req.params.id);
-    return successResponse(res, farmer);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const getFarmer = asyncHandler(async (req, res) => {
+  const farmer = await Farmer.findOne({
+    $or: [{ _id: req.params.id }, { farmerId: req.params.id }],
+  });
 
-export const updateFarmer = async (req, res, next) => {
-  try {
-    const farmer = await farmerService.updateFarmer(req.params.id, req.body);
-    return successResponse(res, farmer, 'Farmer updated successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  if (!farmer) {
+    const err = new Error('Farmer not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
 
-export const deleteFarmer = async (req, res, next) => {
-  try {
-    const result = await farmerService.deleteFarmer(req.params.id);
-    return successResponse(res, result, 'Farmer deleted successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+  return successResponse(res, farmer);
+});
 
-export const listFarmers = async (req, res, next) => {
-  try {
-    const { data, total, page, limit } = await farmerService.listFarmers(req.query);
-    return paginatedResponse(res, data, total, page, limit);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+const updateFarmer = asyncHandler(async (req, res) => {
+  const farmer = await Farmer.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!farmer) {
+    const err = new Error('Farmer not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
+
+  return successResponse(res, farmer, 'Farmer updated successfully');
+});
+
+const deleteFarmer = asyncHandler(async (req, res) => {
+  const farmer = await Farmer.findById(req.params.id);
+
+  if (!farmer) {
+    const err = new Error('Farmer not found');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  farmer.isActive = false;
+  await farmer.save();
+
+  return successResponse(res, { message: 'Farmer deleted successfully' }, 'Farmer deleted successfully');
+});
+
+const listFarmers = asyncHandler(async (req, res) => {
+  const { page, limit, search, district, status, sort } = req.query;
+  const { skip, limit: pageLimit, page: currentPage } = calculatePagination(page, limit);
+
+  const filter = {};
+
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: 'i' } },
+      { phone: { $regex: search, $options: 'i' } },
+      { farmerId: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  if (district) filter.district = district;
+  if (status) filter.status = status;
+
+  let sortOption = { createdAt: -1 };
+  if (sort) {
+    const sortFields = sort.split(',').reduce((acc, field) => {
+      if (field.startsWith('-')) acc[field.substring(1)] = -1;
+      else acc[field] = 1;
+      return acc;
+    }, {});
+    sortOption = sortFields;
+  }
+
+  const [farmers, total] = await Promise.all([
+    Farmer.find(filter).sort(sortOption).skip(skip).limit(pageLimit),
+    Farmer.countDocuments(filter),
+  ]);
+
+  return paginatedResponse(res, farmers, total, currentPage, pageLimit);
+});
+
+module.exports = { createFarmer, getFarmer, updateFarmer, deleteFarmer, listFarmers };

@@ -1,13 +1,7 @@
-import { Router } from 'express';
-import {
-  createUser,
-  listUsers,
-  getUser,
-  updateUser,
-  deleteUser,
-} from '../controllers/user.controller.js';
-import { createUserRules } from '../validators/user.validator.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { createUser, listUsers, getUser, updateUser, deleteUser } = require('../controllers/user.controller');
+const { createUserRules } = require('../validators/user.validator');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -17,4 +11,4 @@ router.get('/:id', protect, authorize('Administrator'), getUser);
 router.put('/:id', protect, authorize('Administrator'), updateUser);
 router.delete('/:id', protect, authorize('Administrator'), deleteUser);
 
-export default router;
+module.exports = router;

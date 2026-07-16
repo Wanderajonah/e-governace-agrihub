@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const registerRules = [
+const registerRules = [
   body('name')
     .trim()
     .notEmpty()
@@ -21,7 +21,7 @@ export const registerRules = [
     .withMessage('District is required'),
 ];
 
-export const loginRules = [
+const loginRules = [
   body('email')
     .isEmail()
     .withMessage('Valid email is required'),
@@ -30,7 +30,7 @@ export const loginRules = [
     .withMessage('Password is required'),
 ];
 
-export const changePasswordRules = [
+const changePasswordRules = [
   body('currentPassword')
     .notEmpty()
     .withMessage('Current password is required'),
@@ -45,3 +45,5 @@ export const changePasswordRules = [
       return true;
     }),
 ];
+
+module.exports = { registerRules, loginRules, changePasswordRules };

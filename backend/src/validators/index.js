@@ -1,7 +1,17 @@
-export * from './auth.validator.js';
-export * from './farmer.validator.js';
-export * from './produce.validator.js';
-export * from './price.validator.js';
-export * from './transaction.validator.js';
-export * from './verification.validator.js';
-export * from './user.validator.js';
+const { registerRules, loginRules, changePasswordRules } = require('./auth.validator');
+const { createFarmerRules, updateFarmerRules } = require('./farmer.validator');
+const { createProduceRules, updateProduceRules } = require('./produce.validator');
+const { createPriceRules, updatePriceRules } = require('./price.validator');
+const { createTransactionRules, updateTransactionRules } = require('./transaction.validator');
+const { createVerificationRules, updateVerificationRules } = require('./verification.validator');
+const { createUserRules, updateUserRules } = require('./user.validator');
+
+module.exports = {
+  registerRules, loginRules, changePasswordRules,
+  createFarmerRules, updateFarmerRules,
+  createProduceRules, updateProduceRules,
+  createPriceRules, updatePriceRules,
+  createTransactionRules, updateTransactionRules,
+  createVerificationRules, updateVerificationRules,
+  createUserRules, updateUserRules,
+};

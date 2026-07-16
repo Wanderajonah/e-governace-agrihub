@@ -1,4 +1,4 @@
-import config from '../config/index.js';
+const config = require('../config/index');
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
@@ -42,4 +42,4 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).json(response);
 };
 
-export default errorHandler;
+module.exports = errorHandler;

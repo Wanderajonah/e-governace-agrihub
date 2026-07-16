@@ -1,47 +1,95 @@
-import { successResponse, errorResponse, paginatedResponse } from '../utils/apiResponse.js';
-import userService from '../services/user.service.js';
+const asyncHandler = require('express-async-handler');
+const User = require('../models/User');
+const { calculatePagination } = require('../utils/helpers');
+const { successResponse, paginatedResponse } = require('../utils/apiResponse');
 
-export const createUser = async (req, res, next) => {
-  try {
-    const user = await userService.createUser(req.body);
-    return successResponse(res, user, 'User created successfully', 201);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const createUser = asyncHandler(async (req, res) => {
+  const user = await User.create(req.body);
+  user.password = undefined;
+  return successResponse(res, user, 'User created successfully', 201);
+});
 
-export const getUser = async (req, res, next) => {
-  try {
-    const user = await userService.getUser(req.params.id);
-    return successResponse(res, user);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
 
-export const updateUser = async (req, res, next) => {
-  try {
-    const user = await userService.updateUser(req.params.id, req.body);
-    return successResponse(res, user, 'User updated successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  if (!user) {
+    const err = new Error('User not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
 
-export const deleteUser = async (req, res, next) => {
-  try {
-    const result = await userService.deleteUser(req.params.id);
-    return successResponse(res, result, 'User deleted successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+  return successResponse(res, user);
+});
 
-export const listUsers = async (req, res, next) => {
-  try {
-    const { data, total, page, limit } = await userService.listUsers(req.query);
-    return paginatedResponse(res, data, total, page, limit);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+const updateUser = asyncHandler(async (req, res) => {
+  if (req.body.password) {
+    const err = new Error('Password cannot be updated through this endpoint');
+    err.statusCode = 400;
+    throw err;
   }
-};
+
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    const err = new Error('User not found');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return successResponse(res, user, 'User updated successfully');
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    const err = new Error('User not found');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  user.isActive = false;
+  user.status = 'Inactive';
+  await user.save();
+
+  return successResponse(res, { message: 'User deleted successfully' }, 'User deleted successfully');
+});
+
+const listUsers = asyncHandler(async (req, res) => {
+  const { page, limit, search, role, status, sort } = req.query;
+  const { skip, limit: pageLimit, page: currentPage } = calculatePagination(page, limit);
+
+  const filter = {};
+
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  if (role) filter.role = role;
+  if (status) filter.status = status;
+
+  let sortOption = { createdAt: -1 };
+  if (sort) {
+    const sortFields = sort.split(',').reduce((acc, field) => {
+      if (field.startsWith('-')) acc[field.substring(1)] = -1;
+      else acc[field] = 1;
+      return acc;
+    }, {});
+    sortOption = sortFields;
+  }
+
+  const [users, total] = await Promise.all([
+    User.find(filter).sort(sortOption).skip(skip).limit(pageLimit),
+    User.countDocuments(filter),
+  ]);
+
+  return paginatedResponse(res, users, total, currentPage, pageLimit);
+});
+
+module.exports = { createUser, getUser, updateUser, deleteUser, listUsers };

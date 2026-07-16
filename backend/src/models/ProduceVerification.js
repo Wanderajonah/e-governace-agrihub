@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const produceVerificationSchema = new mongoose.Schema(
   {
@@ -101,4 +101,4 @@ produceVerificationSchema.pre('save', async function (next) {
 
 const ProduceVerification = mongoose.model('ProduceVerification', produceVerificationSchema);
 
-export default ProduceVerification;
+module.exports = ProduceVerification;

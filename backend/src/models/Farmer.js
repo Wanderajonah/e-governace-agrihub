@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const farmerSchema = new mongoose.Schema(
   {
@@ -76,4 +76,4 @@ farmerSchema.pre(/^find/, function (next) {
 
 const Farmer = mongoose.model('Farmer', farmerSchema);
 
-export default Farmer;
+module.exports = Farmer;

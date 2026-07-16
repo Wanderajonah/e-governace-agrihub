@@ -1,9 +1,9 @@
-export const generateId = (prefix, lastNumber) => {
+const generateId = (prefix, lastNumber) => {
   const number = (lastNumber || 0) + 1;
   return `${prefix}${String(number).padStart(3, '0')}`;
 };
 
-export const calculatePagination = (page = 1, limit = 10) => {
+const calculatePagination = (page = 1, limit = 10) => {
   const p = Math.max(1, parseInt(page, 10) || 1);
   const l = Math.max(1, parseInt(limit, 10) || 10);
   return {
@@ -22,6 +22,8 @@ const generateRandomSegment = (length) => {
   return result;
 };
 
-export const generateReceiptNumber = () => {
+const generateReceiptNumber = () => {
   return `RCP-${generateRandomSegment(4)}`;
 };
+
+module.exports = { generateId, calculatePagination, generateReceiptNumber };

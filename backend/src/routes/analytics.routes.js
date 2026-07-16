@@ -1,16 +1,6 @@
-import { Router } from 'express';
-import {
-  getCommodityTrends,
-  getMonthlyTransactions,
-  getRevenue,
-  getMarketTurnover,
-  getProduceVolume,
-  getPriceFluctuations,
-  getTopCommodities,
-  getTopDistricts,
-  getRecentRegistrations,
-} from '../controllers/analytics.controller.js';
-import { protect } from '../middleware/auth.js';
+const { Router } = require('express');
+const { getCommodityTrends, getMonthlyTransactions, getRevenue, getMarketTurnover, getProduceVolume, getPriceFluctuations, getTopCommodities, getTopDistricts, getRecentRegistrations } = require('../controllers/analytics.controller');
+const { protect } = require('../middleware/auth');
 
 const router = Router();
 
@@ -24,4 +14,4 @@ router.get('/top-commodities', protect, getTopCommodities);
 router.get('/top-districts', protect, getTopDistricts);
 router.get('/recent-registrations', protect, getRecentRegistrations);
 
-export default router;
+module.exports = router;

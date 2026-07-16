@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const systemSettingSchema = new mongoose.Schema(
   {
@@ -41,4 +41,4 @@ systemSettingSchema.statics.updateSetting = async function (key, value, options 
 
 const SystemSetting = mongoose.model('SystemSetting', systemSettingSchema);
 
-export default SystemSetting;
+module.exports = SystemSetting;

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const commodityPriceSchema = new mongoose.Schema(
   {
@@ -41,4 +41,4 @@ commodityPriceSchema.index({ date: -1 });
 
 const CommodityPrice = mongoose.model('CommodityPrice', commodityPriceSchema);
 
-export default CommodityPrice;
+module.exports = CommodityPrice;

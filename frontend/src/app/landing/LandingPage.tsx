@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, createPortal } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import * as api from "../../api";
 import gsap from "gsap";
@@ -9,7 +9,6 @@ import {
   MapPin, Mail, Phone, Clock, ChevronLeft, ChevronRight, Star, Quote,
   Facebook, Twitter, Linkedin, Instagram, Send, ChevronDown,
   ChevronUp, Lock, Flower2, Sprout, Sun, Snowflake,
-  ChevronLeft,
 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,

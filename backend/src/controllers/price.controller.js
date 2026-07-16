@@ -1,56 +1,127 @@
-import { successResponse, errorResponse, paginatedResponse } from '../utils/apiResponse.js';
-import priceService from '../services/price.service.js';
+const asyncHandler = require('express-async-handler');
+const CommodityPrice = require('../models/CommodityPrice');
+const { calculatePagination } = require('../utils/helpers');
+const { successResponse, paginatedResponse } = require('../utils/apiResponse');
 
-export const createPrice = async (req, res, next) => {
-  try {
-    const price = await priceService.createPrice(req.body);
-    return successResponse(res, price, 'Price created successfully', 201);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const createPrice = asyncHandler(async (req, res) => {
+  const previousPrice = await CommodityPrice.findOne({ commodity: req.body.commodity })
+    .sort({ date: -1 })
+    .limit(1);
 
-export const getPrice = async (req, res, next) => {
-  try {
-    const price = await priceService.getPrice(req.params.id);
-    return successResponse(res, price);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  let change = 0;
+  if (previousPrice) {
+    change = req.body.price - previousPrice.price;
   }
-};
 
-export const updatePrice = async (req, res, next) => {
-  try {
-    const price = await priceService.updatePrice(req.params.id, req.body);
-    return successResponse(res, price, 'Price updated successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+  const price = await CommodityPrice.create({ ...req.body, change });
+  return successResponse(res, price, 'Price created successfully', 201);
+});
 
-export const deletePrice = async (req, res, next) => {
-  try {
-    const result = await priceService.deletePrice(req.params.id);
-    return successResponse(res, result, 'Price deleted successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const getPrice = asyncHandler(async (req, res) => {
+  const price = await CommodityPrice.findById(req.params.id);
 
-export const listPrices = async (req, res, next) => {
-  try {
-    const { data, total, page, limit } = await priceService.listPrices(req.query);
-    return paginatedResponse(res, data, total, page, limit);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  if (!price) {
+    const err = new Error('Price record not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
 
-export const getPriceTrends = async (req, res, next) => {
-  try {
-    const trends = await priceService.getPriceTrends(req.query.commodity, req.query.days);
-    return successResponse(res, trends, 'Price trends retrieved successfully');
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  return successResponse(res, price);
+});
+
+const updatePrice = asyncHandler(async (req, res) => {
+  const price = await CommodityPrice.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!price) {
+    const err = new Error('Price record not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
+
+  return successResponse(res, price, 'Price updated successfully');
+});
+
+const deletePrice = asyncHandler(async (req, res) => {
+  const price = await CommodityPrice.findByIdAndDelete(req.params.id);
+
+  if (!price) {
+    const err = new Error('Price record not found');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  return successResponse(res, { message: 'Price record deleted successfully' }, 'Price record deleted successfully');
+});
+
+const listPrices = asyncHandler(async (req, res) => {
+  const { page, limit, search, grade, startDate, endDate, sort } = req.query;
+  const { skip, limit: pageLimit, page: currentPage } = calculatePagination(page, limit);
+
+  const filter = {};
+
+  if (search) filter.commodity = { $regex: search, $options: 'i' };
+  if (grade) filter.grade = grade;
+
+  if (startDate || endDate) {
+    filter.date = {};
+    if (startDate) filter.date.$gte = new Date(startDate);
+    if (endDate) filter.date.$lte = new Date(endDate);
+  }
+
+  let sortOption = { date: -1 };
+  if (sort) {
+    const sortFields = sort.split(',').reduce((acc, field) => {
+      if (field.startsWith('-')) acc[field.substring(1)] = -1;
+      else acc[field] = 1;
+      return acc;
+    }, {});
+    sortOption = sortFields;
+  }
+
+  const [prices, total] = await Promise.all([
+    CommodityPrice.find(filter).sort(sortOption).skip(skip).limit(pageLimit),
+    CommodityPrice.countDocuments(filter),
+  ]);
+
+  return paginatedResponse(res, prices, total, currentPage, pageLimit);
+});
+
+const getPriceTrends = asyncHandler(async (req, res) => {
+  const commodity = req.query.commodity;
+  const days = req.query.days || 30;
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+
+  const trends = await CommodityPrice.aggregate([
+    {
+      $match: {
+        commodity: { $regex: commodity, $options: 'i' },
+        date: { $gte: startDate },
+      },
+    },
+    { $sort: { date: 1 } },
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+        price: { $avg: '$price' },
+        change: { $avg: '$change' },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        _id: 0, date: '$_id',
+        price: { $round: ['$price', 2] },
+        change: { $round: ['$change', 2] },
+      },
+    },
+    { $sort: { date: 1 } },
+  ]);
+
+  return successResponse(res, trends, 'Price trends retrieved successfully');
+});
+
+module.exports = { createPrice, getPrice, updatePrice, deletePrice, listPrices, getPriceTrends };

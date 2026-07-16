@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createVerificationRules = [
+const createVerificationRules = [
   body('produce')
     .notEmpty()
     .withMessage('Produce is required')
@@ -21,7 +21,7 @@ export const createVerificationRules = [
     .withMessage('Inspector comments are required'),
 ];
 
-export const updateVerificationRules = [
+const updateVerificationRules = [
   body('produce')
     .optional()
     .isMongoId()
@@ -37,3 +37,5 @@ export const updateVerificationRules = [
   body('inspectorComments')
     .optional(),
 ];
+
+module.exports = { createVerificationRules, updateVerificationRules };

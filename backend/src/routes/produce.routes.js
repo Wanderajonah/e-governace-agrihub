@@ -1,14 +1,7 @@
-import { Router } from 'express';
-import {
-  registerProduce,
-  listProduce,
-  getProduce,
-  updateProduce,
-  deleteProduce,
-  listMyProduce,
-} from '../controllers/produce.controller.js';
-import { createProduceRules } from '../validators/produce.validator.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { registerProduce, listProduce, getProduce, updateProduce, deleteProduce, listMyProduce } = require('../controllers/produce.controller');
+const { createProduceRules } = require('../validators/produce.validator');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -19,4 +12,4 @@ router.get('/:id', protect, getProduce);
 router.put('/:id', protect, authorize('Administrator', 'Market Officer'), updateProduce);
 router.delete('/:id', protect, authorize('Administrator'), deleteProduce);
 
-export default router;
+module.exports = router;

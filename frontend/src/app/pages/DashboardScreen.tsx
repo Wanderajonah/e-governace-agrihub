@@ -125,13 +125,19 @@ function DashboardScreen({ onNavigate }: { onNavigate?: (s: Screen) => void }) {
             COLORS.success,
             COLORS.secondary,
           ];
-          setProduceVol(
-            volRes.data.data.map((v: any, i: number) => ({
-              name: v.commodity,
-              value: v.totalQuantity,
-              fill: fills[i % fills.length],
-            })),
-          );
+          const maxSlices = 7;
+          const top = volRes.data.data.slice(0, maxSlices);
+          const rest = volRes.data.data.slice(maxSlices);
+          const othersTotal = rest.reduce((s: number, v: any) => s + v.totalQuantity, 0);
+          const consolidated = top.map((v: any, i: number) => ({
+            name: v.commodity,
+            value: v.totalQuantity,
+            fill: fills[i % fills.length],
+          }));
+          if (rest.length > 0) {
+            consolidated.push({ name: "Others", value: othersTotal, fill: "#CBD5E1" });
+          }
+          setProduceVol(consolidated);
         }
         if (revRes.data.data) {
           setRevChart(

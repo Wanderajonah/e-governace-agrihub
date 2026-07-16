@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createUserRules = [
+const createUserRules = [
   body('name')
     .notEmpty()
     .withMessage('Name is required'),
@@ -21,7 +21,7 @@ export const createUserRules = [
     .withMessage('Role must be Administrator, Market Officer, Produce Inspector, or Government Officer'),
 ];
 
-export const updateUserRules = [
+const updateUserRules = [
   body('name')
     .optional(),
   body('email')
@@ -37,3 +37,5 @@ export const updateUserRules = [
     .isIn(['Administrator', 'Market Officer', 'Produce Inspector', 'Government Officer'])
     .withMessage('Role must be Administrator, Market Officer, Produce Inspector, or Government Officer'),
 ];
+
+module.exports = { createUserRules, updateUserRules };

@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createTransactionRules = [
+const createTransactionRules = [
   body('buyer')
     .notEmpty()
     .withMessage('Buyer is required'),
@@ -27,7 +27,7 @@ export const createTransactionRules = [
     .withMessage('Payment must be Cash, Mobile Money, Bank Transfer, or Cheque'),
 ];
 
-export const updateTransactionRules = [
+const updateTransactionRules = [
   body('buyer')
     .optional(),
   body('seller')
@@ -47,3 +47,5 @@ export const updateTransactionRules = [
     .isIn(['Cash', 'Mobile Money', 'Bank Transfer', 'Cheque'])
     .withMessage('Payment must be Cash, Mobile Money, Bank Transfer, or Cheque'),
 ];
+
+module.exports = { createTransactionRules, updateTransactionRules };

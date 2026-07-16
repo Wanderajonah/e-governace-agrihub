@@ -1,12 +1,6 @@
-import { Router } from 'express';
-import {
-  createNotification,
-  getNotifications,
-  markAsRead,
-  markAllAsRead,
-  getUnreadCount,
-} from '../controllers/notification.controller.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { createNotification, getNotifications, markAsRead, markAllAsRead, getUnreadCount } = require('../controllers/notification.controller');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -16,4 +10,4 @@ router.get('/unread-count', protect, getUnreadCount);
 router.put('/read-all', protect, markAllAsRead);
 router.put('/:id/read', protect, markAsRead);
 
-export default router;
+module.exports = router;

@@ -1,13 +1,7 @@
-import { Router } from 'express';
-import {
-  createVerification,
-  listVerifications,
-  approveVerification,
-  rejectVerification,
-  getVerification,
-} from '../controllers/verification.controller.js';
-import { createVerificationRules } from '../validators/verification.validator.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { createVerification, listVerifications, approveVerification, rejectVerification, getVerification } = require('../controllers/verification.controller');
+const { createVerificationRules } = require('../validators/verification.validator');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -17,4 +11,4 @@ router.put('/:id/approve', protect, authorize('Produce Inspector', 'Administrato
 router.put('/:id/reject', protect, authorize('Produce Inspector', 'Administrator'), rejectVerification);
 router.get('/:id', protect, getVerification);
 
-export default router;
+module.exports = router;

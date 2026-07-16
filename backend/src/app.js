@@ -1,13 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import rateLimit from 'express-rate-limit';
-import swaggerJsDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import mountRoutes from './routes/index.js';
-import errorHandler from './middleware/errorHandler.js';
-import swaggerSpec from './docs/swagger.js';
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const mountRoutes = require('./routes/index');
+const errorHandler = require('./middleware/errorHandler');
+const swaggerSpec = require('./docs/swagger');
 
 const app = express();
 
@@ -35,4 +34,4 @@ mountRoutes(app);
 
 app.use(errorHandler);
 
-export default app;
+module.exports = app;

@@ -1,14 +1,14 @@
-import authRoutes from './auth.routes.js';
-import farmerRoutes from './farmer.routes.js';
-import produceRoutes from './produce.routes.js';
-import priceRoutes from './price.routes.js';
-import verificationRoutes from './verification.routes.js';
-import transactionRoutes from './transaction.routes.js';
-import dashboardRoutes from './dashboard.routes.js';
-import analyticsRoutes from './analytics.routes.js';
-import reportRoutes from './report.routes.js';
-import notificationRoutes from './notification.routes.js';
-import userRoutes from './user.routes.js';
+const authRoutes = require('./auth.routes');
+const farmerRoutes = require('./farmer.routes');
+const produceRoutes = require('./produce.routes');
+const priceRoutes = require('./price.routes');
+const verificationRoutes = require('./verification.routes');
+const transactionRoutes = require('./transaction.routes');
+const dashboardRoutes = require('./dashboard.routes');
+const analyticsRoutes = require('./analytics.routes');
+const reportRoutes = require('./report.routes');
+const notificationRoutes = require('./notification.routes');
+const userRoutes = require('./user.routes');
 
 const mountRoutes = (app) => {
   app.get('/api/health', (req, res) => {
@@ -28,4 +28,4 @@ const mountRoutes = (app) => {
   app.use('/api/users', userRoutes);
 };
 
-export default mountRoutes;
+module.exports = mountRoutes;

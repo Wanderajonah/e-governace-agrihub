@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import { generateReport, listReports, getReport } from '../controllers/report.controller.js';
-import { protect, authorize } from '../middleware/auth.js';
+const { Router } = require('express');
+const { generateReport, listReports, getReport } = require('../controllers/report.controller');
+const { protect, authorize } = require('../middleware/auth');
 
 const router = Router();
 
@@ -8,4 +8,4 @@ router.post('/generate', protect, authorize('Administrator', 'Government Officer
 router.get('/', protect, listReports);
 router.get('/:id', protect, getReport);
 
-export default router;
+module.exports = router;

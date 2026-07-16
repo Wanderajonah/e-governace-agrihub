@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const produceSchema = new mongoose.Schema(
   {
@@ -120,4 +120,4 @@ produceSchema.pre(/^find/, function (next) {
 
 const Produce = mongoose.model('Produce', produceSchema);
 
-export default Produce;
+module.exports = Produce;

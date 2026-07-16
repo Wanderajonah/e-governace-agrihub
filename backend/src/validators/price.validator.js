@@ -1,6 +1,6 @@
-import { body } from 'express-validator';
+const { body } = require('express-validator');
 
-export const createPriceRules = [
+const createPriceRules = [
   body('commodity')
     .notEmpty()
     .withMessage('Commodity is required'),
@@ -15,7 +15,7 @@ export const createPriceRules = [
     .withMessage('Grade must be A, B, or C'),
 ];
 
-export const updatePriceRules = [
+const updatePriceRules = [
   body('commodity')
     .optional(),
   body('price')
@@ -27,3 +27,5 @@ export const updatePriceRules = [
     .isIn(['A', 'B', 'C'])
     .withMessage('Grade must be A, B, or C'),
 ];
+
+module.exports = { createPriceRules, updatePriceRules };

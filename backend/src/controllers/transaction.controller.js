@@ -1,29 +1,68 @@
-import { successResponse, errorResponse, paginatedResponse } from '../utils/apiResponse.js';
-import transactionService from '../services/transaction.service.js';
+const asyncHandler = require('express-async-handler');
+const Transaction = require('../models/Transaction');
+const { calculatePagination } = require('../utils/helpers');
+const { successResponse, paginatedResponse } = require('../utils/apiResponse');
 
-export const createTransaction = async (req, res, next) => {
-  try {
-    const transaction = await transactionService.createTransaction(req.body);
-    return successResponse(res, transaction, 'Transaction created successfully', 201);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const createTransaction = asyncHandler(async (req, res) => {
+  const total = req.body.qtyNum * req.body.unitPrice;
+  const transaction = await Transaction.create({ ...req.body, total });
+  return successResponse(res, transaction, 'Transaction created successfully', 201);
+});
 
-export const getTransaction = async (req, res, next) => {
-  try {
-    const transaction = await transactionService.getTransaction(req.params.id);
-    return successResponse(res, transaction);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
-  }
-};
+const getTransaction = asyncHandler(async (req, res) => {
+  const transaction = await Transaction.findOne({
+    $or: [{ _id: req.params.id }, { transactionId: req.params.id }],
+  });
 
-export const listTransactions = async (req, res, next) => {
-  try {
-    const { data, total, page, limit } = await transactionService.listTransactions(req.query);
-    return paginatedResponse(res, data, total, page, limit);
-  } catch (err) {
-    return errorResponse(res, err.message, 500);
+  if (!transaction) {
+    const err = new Error('Transaction not found');
+    err.statusCode = 404;
+    throw err;
   }
-};
+
+  return successResponse(res, transaction);
+});
+
+const listTransactions = asyncHandler(async (req, res) => {
+  const { page, limit, search, payment, startDate, endDate, sort } = req.query;
+  const { skip, limit: pageLimit, page: currentPage } = calculatePagination(page, limit);
+
+  const filter = {};
+
+  if (search) {
+    filter.$or = [
+      { transactionId: { $regex: search, $options: 'i' } },
+      { buyer: { $regex: search, $options: 'i' } },
+      { seller: { $regex: search, $options: 'i' } },
+      { commodity: { $regex: search, $options: 'i' } },
+      { receiptNumber: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  if (payment) filter.payment = payment;
+
+  if (startDate || endDate) {
+    filter.date = {};
+    if (startDate) filter.date.$gte = new Date(startDate);
+    if (endDate) filter.date.$lte = new Date(endDate);
+  }
+
+  let sortOption = { date: -1 };
+  if (sort) {
+    const sortFields = sort.split(',').reduce((acc, field) => {
+      if (field.startsWith('-')) acc[field.substring(1)] = -1;
+      else acc[field] = 1;
+      return acc;
+    }, {});
+    sortOption = sortFields;
+  }
+
+  const [transactions, total] = await Promise.all([
+    Transaction.find(filter).sort(sortOption).skip(skip).limit(pageLimit),
+    Transaction.countDocuments(filter),
+  ]);
+
+  return paginatedResponse(res, transactions, total, currentPage, pageLimit);
+});
+
+module.exports = { createTransaction, getTransaction, listTransactions };
